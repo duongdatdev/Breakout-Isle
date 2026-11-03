@@ -1,0 +1,107 @@
+{
+  "action": "hide-exit",
+  "sheet": "hide-exit.png",
+  "directionOrder": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "frameCount": 4,
+  "fps": 10,
+  "loop": false,
+  "cellSizePx": 64,
+  "pixelsPerUnit": 32,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.0625
+  },
+  "spriteImport": {
+    "textureType": "Sprite (2D and UI)",
+    "spriteMode": "Multiple",
+    "filterMode": "Point",
+    "mipmaps": false,
+    "compression": "None",
+    "meshType": "Full Rect",
+    "slice": {
+      "widthPx": 64,
+      "heightPx": 64,
+      "rowOrder": "top-to-bottom",
+      "columnOrder": "left-to-right"
+    }
+  },
+  "frames": {
+    "S": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "SW": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "W": [
+      8,
+      9,
+      10,
+      11
+    ],
+    "NW": [
+      12,
+      13,
+      14,
+      15
+    ],
+    "N": [
+      16,
+      17,
+      18,
+      19
+    ],
+    "NE": [
+      20,
+      21,
+      22,
+      23
+    ],
+    "E": [
+      24,
+      25,
+      26,
+      27
+    ],
+    "SE": [
+      28,
+      29,
+      30,
+      31
+    ]
+  },
+  "source": {
+    "rawSheet": "ArtSource/Characters/RookPrison/hide-exit/raw-sheet.png",
+    "prompt": "ArtSource/Characters/RookPrison/hide-exit/prompt-used.txt",
+    "processorMetadata": "ArtSource/Characters/RookPrison/hide-exit/processed/pipeline-meta.json",
+    "rawSha256": "25ec08ebf0f5242f2897f5f0f8e4d96c0aba621ec001b43757e38fccaee361d6"
+  },
+  "qc": {
+    "frame_count": 32,
+    "valid_frame_count": 32,
+    "empty_count": 0,
+    "edge_touch_count": 0,
+    "paste_clamped_count": 0,
+    "body_scale_mean": 0.48177144394428373,
+    "output_subject_height_mean": 48.28125,
+    "body_scale_cv": 0.05069350970890266,
+    "anchor_x_std": 0.07399105943990014,
+    "anchor_y_std": 0.022506456730351797,
+    "anchor_y_mean": 0.9007188967136148,
+    "profile_body_scale_drift": 0.02270032232464969
+  }
+}
