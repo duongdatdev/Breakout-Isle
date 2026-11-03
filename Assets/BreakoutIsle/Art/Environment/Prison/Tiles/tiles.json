@@ -1,0 +1,233 @@
+{
+  "source": "prison-tiles-raw.png",
+  "rows": 4,
+  "columns": 4,
+  "tiles": [
+    {
+      "id": "floor_clean",
+      "file": "floor_clean.png",
+      "sourceCell": [
+        0,
+        0
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "floor_cracked",
+      "file": "floor_cracked.png",
+      "sourceCell": [
+        1,
+        0
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "floor_damp",
+      "file": "floor_damp.png",
+      "sourceCell": [
+        2,
+        0
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "floor_scuffed",
+      "file": "floor_scuffed.png",
+      "sourceCell": [
+        3,
+        0
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "wall_clean",
+      "file": "wall_clean.png",
+      "sourceCell": [
+        0,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "wall_cracked",
+      "file": "wall_cracked.png",
+      "sourceCell": [
+        1,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "wall_damp",
+      "file": "wall_damp.png",
+      "sourceCell": [
+        2,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "wall_scuffed",
+      "file": "wall_scuffed.png",
+      "sourceCell": [
+        3,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "floor_drain",
+      "file": "floor_drain.png",
+      "sourceCell": [
+        0,
+        2
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "floor_dark",
+      "file": "floor_dark.png",
+      "sourceCell": [
+        1,
+        2
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "floor_utility",
+      "file": "floor_utility.png",
+      "sourceCell": [
+        2,
+        2
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "floor_warning",
+      "file": "floor_warning.png",
+      "sourceCell": [
+        3,
+        2
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "none"
+    },
+    {
+      "id": "boundary_left",
+      "file": "boundary_left.png",
+      "sourceCell": [
+        0,
+        3
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "boundary_right",
+      "file": "boundary_right.png",
+      "sourceCell": [
+        1,
+        3
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "boundary_top",
+      "file": "boundary_top.png",
+      "sourceCell": [
+        2,
+        3
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    },
+    {
+      "id": "boundary_bottom",
+      "file": "boundary_bottom.png",
+      "sourceCell": [
+        3,
+        3
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "collider": "cell"
+    }
+  ],
+  "artSource": "built-in image_gen",
+  "postprocess": "cell crop and nearest-neighbor resize only"
+}
