@@ -1,7 +1,9 @@
 ﻿{
   "name": "BreakoutIsle.Runtime",
   "rootNamespace": "BreakoutIsle",
-  "references": [],
+  "references": [
+    "Unity.InputSystem"
+  ],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,
