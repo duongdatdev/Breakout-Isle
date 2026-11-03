@@ -1,0 +1,103 @@
+TÀI LIỆU THIẾT KẾ GAME
+(GAME DESIGN DOCUMENT)
+1. THÔNG TIN DỰ ÁN
+•	Tên dự án: Breakout Isle: Đào Tẩu Khỏi Đảo Đá Xám
+•	Thể loại: 2D Top-Down Stealth / Puzzle (Lén lút – Giải đố – Vượt ngục)
+•	Nền tảng mục tiêu: PC (Windows / Mac)
+•	Công cụ phát triển: Unity Engine (2D)
+•	Thời lượng: 5 – 10 phút mỗi màn, tổng khoảng 1,5 – 2 giờ (3 Map, 10 màn chơi)
+2. Ý TƯỞNG CỐT LÕI & VÒNG LẶP CHƠI (CORE LOOP)
+•	Bối cảnh: Người chơi nhập vai Rook – tù nhân số 0175 bị giam tại Nhà tù Đảo Đá Xám, một hòn đảo biệt lập được canh gác nghiêm ngặt. Rook phải vượt ngục, băng qua khu rừng rậm và lẩn trốn qua thành phố cảng để tìm đường thoát khỏi hòn đảo.
+•	Mục tiêu: Ở mỗi màn, hoàn thành chuỗi nhiệm vụ để lấy được Chìa khóa màn (vật phẩm mở cửa thoát sang màn tiếp theo) mà không bị cảnh sát bắt.
+•	Vòng lặp màn chơi:
+1)	Quan sát lộ trình tuần tra và vùng nhìn của cảnh sát.
+2)	Di chuyển lén lút qua các vùng tối và nơi ẩn nấp.
+3)	Hoàn thành chuỗi nhiệm vụ (VD: gạt cần → hiện hòm → tìm chìa khóa hòm → mở hòm lấy Chìa khóa màn).
+4)	Dùng Chìa khóa màn mở cửa thoát để sang màn tiếp theo.
+5)	Vượt qua 10 màn thuộc 3 Map (Nhà tù → Rừng → Thành phố) để thoát khỏi đảo.
+3. CƠ CHẾ ĐIỀU KHIỂN & CHỈ SỐ NHÂN VẬT
+3.1. Chỉ số cơ bản
+•	Tốc độ di chuyển: Lén 1,5 m/s | Đi bộ 3 m/s | Chạy nhanh 6 m/s
+•	Thể lực (Stamina): 100 điểm. Chạy nhanh tiêu hao 20 điểm/giây, tự hồi 15 điểm/giây sau khi ngừng chạy 1 giây.
+•	Bán kính tiếng động: Lén 0 m | Đi bộ 3 m | Chạy nhanh 8 m (cảnh sát trong bán kính sẽ nghe thấy và chuyển sang Nghi ngờ).
+•	Túi đồ: 3 ô chứa vật phẩm hỗ trợ (vật phẩm nhiệm vụ không chiếm ô).
+3.2. Cụm phím điều khiển
+•	Di chuyển (WASD): Đi lại 8 hướng.
+•	Chạy nhanh (Shift): Tăng tốc để thoát khi bị truy đuổi, tốn thể lực và gây nhiều tiếng động.
+•	Lén (Ctrl): Đi chậm, không gây tiếng động và giảm tốc độ bị phát hiện.
+•	Tương tác (E): Gạt cần, mở hòm, nhặt đồ, mở cửa, chui vào / ra khỏi nơi ẩn nấp.
+•	Ném vật phẩm (Chuột trái): Giữ để hiện quỹ đạo và điểm rơi, thả để ném nhằm đánh lạc hướng.
+•	Chọn vật phẩm (1 – 3): Chọn ô vật phẩm trong túi đồ.
+•	Bản đồ / Nhiệm vụ (Tab): Mở bản đồ khu vực và danh sách nhiệm vụ của màn.
+3.3. Cơ chế ẩn nấp
+•	Vùng tối / Vùng mờ: Bóng râm, góc khuất, bụi cỏ thưa, khói. Tốc độ bị phát hiện giảm 70%; cảnh sát chỉ thấy người chơi khi đứng rất gần (dưới 1,5 m).
+•	Nơi ẩn nấp hoàn toàn: Tủ đồ, thùng rác, bụi cây rậm, gầm xe. Nhấn E để chui vào – người chơi vô hình hoàn toàn, trừ khi cảnh sát nhìn thấy lúc đang chui vào.
+4. HỆ THỐNG PHÁT HIỆN & AI CẢNH SÁT
+4.1. Vùng nhìn & thanh phát hiện
+•	Vùng nhìn: Mỗi cảnh sát có một vùng nhìn hình nón 90°, dài 6 m, hiển thị mờ trên mặt đất để người chơi quan sát. Tường và vật cản chặn tầm nhìn.
+•	Thanh phát hiện: Khi người chơi đứng trong vùng nhìn, thanh phát hiện trên đầu cảnh sát tăng dần (khoảng 1,5 giây để đầy ở khoảng cách xa, nhanh hơn khi ở gần). Rời khỏi vùng nhìn thì thanh giảm dần.
+•	Hệ số: Nơi sáng ×1 | Đang lén ×0,7 | Vùng tối ×0,3 | Nơi ẩn nấp hoàn toàn ×0.
+•	Lọt vào quá lâu: Thanh đầy 100% → cảnh sát chuyển sang trạng thái Truy đuổi.
+4.2. Các trạng thái của cảnh sát
+•	Tuần tra: Đi theo lộ trình cố định, vùng nhìn màu trắng.
+•	Nghi ngờ (dấu ? vàng): Khi thanh phát hiện đạt 50% hoặc nghe thấy tiếng động. Cảnh sát đi tới vị trí khả nghi để kiểm tra, vùng nhìn chuyển vàng.
+•	Truy đuổi (dấu ! đỏ): Chạy theo người chơi với tốc độ 5,5 m/s và gọi các cảnh sát trong bán kính 10 m cùng truy đuổi. Vùng nhìn chuyển đỏ.
+•	Lục soát: Mất dấu người chơi quá 3 giây → lục soát quanh vị trí cuối cùng trong 10 giây, có thể ngẫu nhiên kiểm tra 1 nơi ẩn nấp gần đó.
+•	Cảnh giác: Sau khi lục soát thất bại, quay lại tuần tra với vùng nhìn tăng 20% trong 30 giây.
+4.3. Bị bắt & Checkpoint
+•	Bị bắt: Cảnh sát chạm được vào người chơi khi đang truy đuổi → nhân vật bị còng tay, màn hình tối lại.
+•	Checkpoint: Mỗi màn có 1 – 2 checkpoint (tự lưu khi hoàn thành một bước nhiệm vụ quan trọng). Bị bắt sẽ chơi lại từ checkpoint gần nhất; nhiệm vụ đã hoàn thành trước checkpoint được giữ nguyên, vật phẩm hỗ trợ nhặt sau checkpoint bị mất.
+5. CẤU TRÚC 3 MAP & 10 MÀN CHƠI (LEVEL PROGRESSION)
+Bảng 1. Cấu trúc các màn chơi
+Màn	Khu vực	Chuỗi nhiệm vụ mở khóa	Chướng ngại & Điểm lưu ý
+MAP 1 – NHÀ TÙ ĐÁ XÁM (Màn 1 – 3)
+Màn 1	Phòng giam	Tìm chiếc thìa giấu dưới gối → cạy nắp lỗ thông gió → bò ra hành lang, lấy Thẻ từ trên bàn cai ngục → mở cửa khu giam.	Màn hướng dẫn: chỉ 1 – 2 cảnh sát tuần tra. Làm quen vùng nhìn, lén và vùng tối.
+Màn 2	Nhà ăn & Phòng giặt	Gạt cần điện trong phòng kỹ thuật → đèn kho tắt, lộ ra hòm khóa → tìm chìa khóa hòm trong phòng giặt → mở hòm lấy Chìa khóa cổng sân tù.	Xuất hiện camera an ninh. Làm quen ném đá đánh lạc hướng và nơi ẩn nấp (tủ đồ, xe đẩy giặt).
+Màn 3	Sân tù & Tháp canh	Lấy kìm cắt ở xưởng mộc → gạt 2 cần điện để tắt đèn pha tháp canh → cắt hàng rào lưới → trèo tường ra bìa rừng.	Đèn pha tháp canh quét theo chu kỳ, nhiều cảnh sát tuần tra theo nhóm.
+MAP 2 – RỪNG RẬM (Màn 4 – 6)
+Màn 4	Bìa rừng	Nhặt 3 mảnh bản đồ rách → ghép bản đồ lộ vị trí hòm chôn → lấy xẻng ở lều cảnh sát → đào hòm lấy Chìa khóa cầu treo.	Xuất hiện bẫy kẹp giấu trong cỏ. Cảnh sát cầm đèn pin, bụi cây rậm là nơi ẩn nấp chính.
+Màn 5	Đầm lầy	Gạt cần cửa đập để hạ mực nước → lộ lối đi và hòm dưới lòng đầm → tìm chìa khóa hòm ở chòi canh → mở hòm lấy Chìa khóa xuồng.	Xuất hiện chó cảnh sát. Bùn làm chậm di chuyển; lội nước để xóa mùi, cắt đuôi chó.
+Màn 6	Trạm kiểm lâm	Tìm cầu dao ngắt hàng rào điện → lấy chìa khóa cổng trong văn phòng trạm → mở cổng, trốn vào thùng xe tải chở hàng về thành phố.	Bẫy dây chuông, chó + cảnh sát phối hợp tuần tra. Màn tổng hợp của Map 2.
+MAP 3 – THÀNH PHỐ CẢNG (Màn 7 – 10)
+Màn 7	Khu ổ chuột	Lấy bộ quần áo thường trên dây phơi → lẻn vào tiệm cầm đồ, đánh lạc hướng chủ tiệm → lấy chìa khóa két → mở két lấy tờ ghi chú mật mã của đồng bọn cũ.	Xuất hiện người dân: thấy người mặc đồ tù hoặc hành động khả nghi sẽ hô hoán báo động cảnh sát.
+Màn 8	Cống ngầm	Gạt 3 van nước theo đúng thứ tự ghi trên tờ mật mã → cửa chắn mở, lộ ra hòm → lấy chìa khóa hòm trong phòng bảo trì → mở hòm lấy Chìa khóa nắp cống lên chợ.	Không gian tối, hẹp. Cảnh sát tuần tra bằng đèn pin; gạt sai van sẽ phát tiếng động lớn.
+Màn 9	Chợ đêm & Trung tâm	Ngắt điện hệ thống camera khu chợ → lẻn vào đồn cảnh sát lấy Thẻ ra vào bến cảng.	Đám đông vừa là nơi ẩn nấp, vừa có nhiều người dân báo động. Camera, cảnh sát và chó cùng xuất hiện.
+Màn 10	Bến cảng (Màn cuối)	Tìm hộp ký gửi của đồng bọn → điều khiển cần cẩu hạ container mở lối đi → mở hộp lấy Chìa khóa ca nô → chạy tới ca nô thoát khỏi đảo.	Sau khi lấy Chìa khóa ca nô, còi báo động toàn khu vang lên: mọi cảnh sát chuyển sang Nghi ngờ, người chơi có 60 giây để tới ca nô.
+6. HỆ THỐNG CHƯỚNG NGẠI VẬT & KẺ THÙ
+6.1. Cảnh sát tuần tra (Tất cả Map)
+•	Chỉ số: Vùng nhìn 90° / 6 m | Tuần tra 2,5 m/s | Truy đuổi 5,5 m/s.
+•	Hành vi: Theo 5 trạng thái ở mục 4.2. Người chơi chạy nhanh hơn cảnh sát nhưng bị giới hạn thể lực, nên phải cắt tầm nhìn và tìm nơi ẩn nấp để thoát.
+6.2. Camera an ninh & Đèn pha (Nhà tù, Thành phố)
+•	Camera: Cố định, quay qua lại 60°. Không đuổi theo, nhưng khi phát hiện sẽ gọi cảnh sát gần nhất tới vị trí người chơi. Có thể vô hiệu hóa bằng cầu dao.
+•	Đèn pha tháp canh: Vùng sáng tròn quét theo lộ trình cố định; đứng trong vùng sáng sẽ bị phát hiện ngay lập tức.
+6.3. Bẫy rừng (Map Rừng)
+•	Bẫy kẹp: Giấu trong cỏ, chỉ lộ ra khi đứng gần 2 m. Dẫm phải bị giữ chân 3 giây và phát tiếng động bán kính 10 m.
+•	Bẫy dây chuông: Dây căng ngang lối đi; vấp phải sẽ rung chuông, báo động mọi cảnh sát trong bán kính 15 m. Đi lén (Ctrl) thì bước qua an toàn.
+6.4. Chó cảnh sát (Map Rừng, Thành phố)
+•	Chỉ số: Tốc độ 7 m/s (nhanh hơn người chơi) | Bán kính đánh hơi 5 m.
+•	Hành vi: Không dựa vào mắt mà đánh hơi – phát hiện được người chơi cả trong vùng tối và bụi cây. Khi phát hiện sẽ sủa gọi cảnh sát và bám theo dấu chân.
+•	Cách đối phó: Lội qua nước để xóa mùi, hoặc ném Miếng thịt để dụ chó.
+6.5. Người dân (Map Thành phố)
+•	Chỉ số: Vùng nhìn 120° / 5 m | Không bắt người chơi.
+•	Hành vi: Khi thấy người chơi mặc đồ tù, chạy nhanh hoặc ném đồ, người dân sẽ hiện dấu ! và hô hoán sau 2 giây → báo động mọi cảnh sát trong bán kính 15 m. Rời khỏi tầm nhìn trước 2 giây để tránh bị báo động.
+7. DANH SÁCH VẬT PHẨM (ITEMS)
+7.1. Vật phẩm nhiệm vụ
+•	Chìa khóa màn: Thẻ từ, chìa khóa cổng, chìa khóa xuồng, thẻ ra vào… Dùng để mở cửa thoát sang màn tiếp theo.
+•	Chìa khóa hòm: Mở các hòm khóa chứa Chìa khóa màn hoặc vật phẩm quan trọng.
+•	Công cụ: Thìa, kìm cắt, xẻng, mảnh bản đồ, tờ mật mã… Chỉ dùng cho nhiệm vụ của màn tương ứng.
+7.2. Vật phẩm hỗ trợ (nhặt trong màn, chiếm ô túi đồ)
+•	Hòn đá / Lon rỗng: Ném tạo tiếng động bán kính 6 m, dụ 1 cảnh sát tới kiểm tra.
+•	Chai thủy tinh: Vỡ tạo tiếng động lớn bán kính 10 m, dụ được nhiều cảnh sát cùng lúc.
+•	Pháo nổ: Nổ sau 3 giây, tiếng động bán kính 12 m; ở thành phố còn khiến đám đông tụ lại, che chắn người chơi.
+•	Miếng thịt: Ném dụ chó cảnh sát tới ăn trong 8 giây, chó bỏ qua người chơi trong thời gian đó.
+•	Nước tăng lực: Hồi đầy thể lực và chạy nhanh không tốn thể lực trong 5 giây.
+8. GIAO DIỆN & CẢM GIÁC CHƠI (GAME FEEL)
+8.1. Giao diện trong màn (HUD)
+•	Góc trên bên trái: Thanh thể lực và 3 ô túi đồ.
+•	Góc trên chính giữa: Tên Map và màn hiện tại (NHÀ TÙ – MÀN 02/10) kèm danh sách nhiệm vụ dạng checklist.
+•	Góc trên bên phải: Bản đồ mini hiển thị cửa thoát và các nơi ẩn nấp đã khám phá.
+8.2. Phản hồi & Hiệu ứng
+•	Vùng nhìn trực quan: Hình nón mờ trên mặt đất đổi màu theo trạng thái cảnh sát (trắng → vàng → đỏ), kèm icon ? / ! trên đầu.
+•	Vòng tiếng động: Hiện vòng tròn lan tỏa khi người chơi chạy nhanh, ném đồ hoặc dẫm bẫy để thấy rõ phạm vi bị nghe thấy.
+•	Trạng thái ẩn nấp: Khi đang ẩn, màn hình tối viền và nhân vật hiển thị mờ; tiếng tim đập to dần khi cảnh sát tiến lại gần.
+•	Âm nhạc: Nhạc nền nhẹ nhàng khi lén lút, chuyển sang dồn dập khi bị truy đuổi và dịu lại khi cảnh sát mất dấu.
