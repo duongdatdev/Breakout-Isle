@@ -1,0 +1,39 @@
+﻿{
+  "schemaVersion": 1,
+  "character": "RookPrison",
+  "bundleStatus": "core-and-requested-secondary-actions-generated",
+  "directionOrder": ["S", "SW", "W", "NW", "N", "NE", "E", "SE"],
+  "cellSizePx": 64,
+  "pixelsPerUnit": 32,
+  "pivot": { "x": 0.5, "y": 0.0625 },
+  "importContract": {
+    "textureType": "Sprite (2D and UI)",
+    "spriteMode": "Multiple",
+    "slicePx": [64, 64],
+    "filterMode": "Point",
+    "mipmaps": false,
+    "compression": "None",
+    "feetPivot": [0.5, 0.0625]
+  },
+  "actions": {
+    "idle": { "status": "generated", "frameCount": 4, "fps": 8, "loop": true, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/idle/idle.png", "source": "ArtSource/Characters/RookPrison/idle/", "qc": "ArtSource/Characters/RookPrison/idle/processed/pipeline-meta.json" },
+    "walk": { "status": "generated", "frameCount": 6, "fps": 10, "loop": true, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/walk/walk.png", "source": "ArtSource/Characters/RookPrison/walk/", "qc": "ArtSource/Characters/RookPrison/walk/processed/pipeline-meta.json" },
+    "run": { "status": "generated", "frameCount": 6, "fps": 12, "loop": true, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/run/run.png", "source": "ArtSource/Characters/RookPrison/run/", "qc": "ArtSource/Characters/RookPrison/run/processed/pipeline-meta.json" },
+    "sneak": { "status": "generated", "frameCount": 6, "fps": 10, "loop": true, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/sneak/sneak.png", "source": "ArtSource/Characters/RookPrison/sneak/", "qc": "ArtSource/Characters/RookPrison/sneak/processed/pipeline-meta.json" },
+    "interact": { "status": "generated", "frameCount": 4, "fps": 10, "loop": false, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/interact/interact.png", "source": "ArtSource/Characters/RookPrison/interact/", "qc": "ArtSource/Characters/RookPrison/interact/processed/pipeline-meta.json" },
+    "throw": { "status": "generated", "frameCount": 6, "fps": 10, "loop": false, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/throw/throw.png", "source": "ArtSource/Characters/RookPrison/throw/", "qc": "ArtSource/Characters/RookPrison/throw/processed/pipeline-meta.json" },
+    "hide-enter": { "status": "generated", "frameCount": 4, "fps": 10, "loop": false, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/hide-enter/hide-enter.png", "source": "ArtSource/Characters/RookPrison/hide-enter/", "qc": "ArtSource/Characters/RookPrison/hide-enter/processed/pipeline-meta.json" },
+    "hide-exit": { "status": "generated", "frameCount": 4, "fps": 10, "loop": false, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/hide-exit/hide-exit.png", "source": "ArtSource/Characters/RookPrison/hide-exit/", "qc": "ArtSource/Characters/RookPrison/hide-exit/processed/pipeline-meta.json" },
+    "caught": { "status": "generated", "frameCount": 6, "fps": 10, "loop": false, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/caught/caught.png", "source": "ArtSource/Characters/RookPrison/caught/", "qc": "ArtSource/Characters/RookPrison/caught/processed/pipeline-meta.json", "rejectedAttempts": 2, "reviewedSourceEdgeOverride": true },
+    "crawl": { "status": "generated", "frameCount": 6, "fps": 10, "loop": true, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/crawl/crawl.png", "source": "ArtSource/Characters/RookPrison/crawl/", "qc": "ArtSource/Characters/RookPrison/crawl/processed/pipeline-meta.json" },
+    "pry": { "status": "generated", "frameCount": 6, "fps": 10, "loop": false, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/pry/pry.png", "source": "ArtSource/Characters/RookPrison/pry/", "qc": "ArtSource/Characters/RookPrison/pry/processed/pipeline-meta.json" },
+    "climb": { "status": "generated", "frameCount": 6, "fps": 10, "loop": true, "sheet": "Assets/BreakoutIsle/Art/Characters/RookPrison/climb/climb.png", "source": "ArtSource/Characters/RookPrison/climb/", "qc": "ArtSource/Characters/RookPrison/climb/processed/pipeline-meta.json" }
+  },
+  "notGenerated": [
+    { "action": "dig", "status": "not-generated", "reason": "Future authored mission action outside this RookPrison core bundle." },
+    { "action": "cut", "status": "not-generated", "reason": "Future authored mission action outside this RookPrison core bundle." },
+    { "action": "valve", "status": "not-generated", "reason": "Future authored mission action outside this RookPrison core bundle." },
+    { "action": "RookCivilian outfit actions", "status": "not-generated", "reason": "Separate outfit bundle not included in this RookPrison task." }
+  ],
+  "runtimeFallbacks": false
+}
