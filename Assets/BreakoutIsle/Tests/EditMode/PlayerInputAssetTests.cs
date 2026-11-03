@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using BreakoutIsle.Gameplay;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -67,6 +69,93 @@ namespace BreakoutIsle.Tests
             Assert.That(tile.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed));
             Assert.That(atlas, Is.Not.Null);
             Assert.That(atlas.textureType, Is.EqualTo(TextureImporterType.Default));
+        }
+
+        [Test]
+        public void PrisonFurnitureUsesTheNinetySixPixelCellAtThirtyTwoPpu()
+        {
+            const string bedPath = "Assets/BreakoutIsle/Art/Environment/Prison/Props/bed.png";
+            const string ventPath = "Assets/BreakoutIsle/Art/Environment/Prison/Props/vent_00.png";
+            var bed = AssetImporter.GetAtPath(bedPath) as TextureImporter;
+            var vent = AssetDatabase.LoadAssetAtPath<Sprite>(ventPath);
+
+            Assert.That(bed, Is.Not.Null);
+            Assert.That(bed.textureType, Is.EqualTo(TextureImporterType.Sprite));
+            Assert.That(bed.spriteImportMode, Is.EqualTo(SpriteImportMode.Single));
+            Assert.That(bed.spritePixelsPerUnit, Is.EqualTo(32f));
+            Assert.That(bed.filterMode, Is.EqualTo(FilterMode.Point));
+            Assert.That(bed.mipmapEnabled, Is.False);
+            Assert.That(bed.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed));
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(bedPath);
+            Assert.That(sprite, Is.Not.Null);
+            Assert.That(sprite.rect.size, Is.EqualTo(new Vector2(96f, 96f)));
+            Assert.That(sprite.pivot.y, Is.EqualTo(6f).Within(0.001f));
+            Assert.That(vent, Is.Not.Null);
+            Assert.That(vent.rect.size, Is.EqualTo(new Vector2(64f, 64f)));
+            Assert.That(vent.pivot, Is.EqualTo(new Vector2(32f, 32f)));
+        }
+
+        [Test]
+        public void InventoryIconsUseSinglePointFilteredThirtyTwoPixelSprites()
+        {
+            const string iconPath = "Assets/BreakoutIsle/Art/UI/Icons/spoon.png";
+            var importer = AssetImporter.GetAtPath(iconPath) as TextureImporter;
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+
+            Assert.That(importer, Is.Not.Null);
+            Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite));
+            Assert.That(importer.spriteImportMode, Is.EqualTo(SpriteImportMode.Single));
+            Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f));
+            Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point));
+            Assert.That(importer.mipmapEnabled, Is.False);
+            Assert.That(importer.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed));
+            Assert.That(sprite.rect.size, Is.EqualTo(new Vector2(32f, 32f)));
+        }
+
+        [Test]
+        public void UiSkinsUseTheAuthoredEightPixelNineSliceBorder()
+        {
+            const string panelPath = "Assets/BreakoutIsle/Art/UI/Skins/panel.png";
+            var importer = AssetImporter.GetAtPath(panelPath) as TextureImporter;
+            Assert.That(importer, Is.Not.Null);
+            Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite));
+            Assert.That(importer.spriteImportMode, Is.EqualTo(SpriteImportMode.Single));
+            Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f));
+            Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point));
+            Assert.That(importer.mipmapEnabled, Is.False);
+            Assert.That(importer.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed));
+
+            var settings = new TextureImporterSettings();
+            importer.ReadTextureSettings(settings);
+            Assert.That(settings.spriteBorder, Is.EqualTo(new Vector4(8f, 8f, 8f, 8f)));
+        }
+
+        [Test]
+        public void RookAnimatorUsesAllFourEightDirectionActionSets()
+        {
+            const string controllerPath = "Assets/BreakoutIsle/Animations/RookPrison/RookPrison.controller";
+            const string clipsPath = "Assets/BreakoutIsle/Animations/RookPrison/Clips";
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath);
+            Assert.That(controller, Is.Not.Null);
+            CollectionAssert.AreEquivalent(new[] { "MoveMode", "FacingX", "FacingY" }, controller.parameters.Select(parameter => parameter.name));
+
+            var directionTrees = AssetDatabase.LoadAllAssetsAtPath(controllerPath)
+                .OfType<BlendTree>()
+                .Where(tree => tree.name.EndsWith("8 Directions"))
+                .ToArray();
+            Assert.That(directionTrees, Has.Length.EqualTo(4));
+            Assert.That(directionTrees.All(tree => tree.children.Length == 8), Is.True);
+
+            var clipGuids = AssetDatabase.FindAssets("t:AnimationClip", new[] { clipsPath });
+            Assert.That(clipGuids, Has.Length.EqualTo(32));
+            var playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/BreakoutIsle/Prefabs/Characters/RookPlayer.prefab");
+            Assert.That(playerPrefab, Is.Not.Null);
+            Assert.That(playerPrefab.GetComponent<SpriteRenderer>().sprite, Is.Not.Null);
+            Assert.That(playerPrefab.GetComponent<Animator>().runtimeAnimatorController, Is.EqualTo(controller));
+            Assert.That(playerPrefab.GetComponent<Rigidbody2D>(), Is.Not.Null);
+            Assert.That(playerPrefab.GetComponent<PlayerMotor>(), Is.Not.Null);
+            Assert.That(playerPrefab.GetComponent<PlayerInputReader>(), Is.Not.Null);
+            Assert.That(playerPrefab.GetComponent<YSortRenderer>(), Is.Not.Null);
         }
 
         private static void AssertBinding(InputActionMap map, string action, string path)

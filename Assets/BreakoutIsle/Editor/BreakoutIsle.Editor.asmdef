@@ -1,7 +1,11 @@
 {
   "name": "BreakoutIsle.Editor",
   "rootNamespace": "BreakoutIsle.Editor",
-  "references": [],
+  "references": [
+    "BreakoutIsle.Runtime",
+    "Unity.InputSystem",
+    "Unity.RenderPipelines.Universal.2D.Runtime"
+  ],
   "includePlatforms": ["Editor"],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

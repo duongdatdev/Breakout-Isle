@@ -13,6 +13,13 @@ namespace BreakoutIsle.Gameplay
 
         public float Current { get; private set; }
 
+        public void RestoreFull()
+        {
+            Current = _maximum;
+            _timeSinceSprint = _recoveryDelay;
+            _exhausted = false;
+        }
+
         public StaminaMeter(float maximum = 100f, float drainPerSecond = 20f, float recoveryPerSecond = 15f, float recoveryDelay = 1f)
         {
             _maximum = Mathf.Max(0f, maximum);

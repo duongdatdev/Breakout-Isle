@@ -3,6 +3,7 @@
   "rootNamespace": "BreakoutIsle.Tests",
   "references": [
     "BreakoutIsle.Runtime",
+    "BreakoutIsle.Editor",
     "Unity.InputSystem"
   ],
   "includePlatforms": ["Editor"],

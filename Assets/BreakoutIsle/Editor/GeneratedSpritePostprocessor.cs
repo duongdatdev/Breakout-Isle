@@ -26,6 +26,21 @@ namespace BreakoutIsle.Editor
             public float y;
         }
 
+        [Serializable]
+        private sealed class PropsManifest
+        {
+            public PropEntry[] props;
+        }
+
+        [Serializable]
+        private sealed class PropEntry
+        {
+            public string file;
+            public int[] size;
+            public int pixelsPerUnit;
+            public float[] pivot;
+        }
+
         private void OnPreprocessTexture()
         {
             var importer = assetImporter as TextureImporter;
@@ -37,6 +52,34 @@ namespace BreakoutIsle.Editor
             if (normalizedPath.StartsWith(prisonTilesPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
             {
                 ApplyTileSettings(importer, Path.GetFileName(normalizedPath) == "prison-tiles-atlas.png");
+                return;
+            }
+
+            const string prisonPropsPath = "Assets/BreakoutIsle/Art/Environment/Prison/Props/";
+            if (normalizedPath.StartsWith(prisonPropsPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
+            {
+                ApplyPropSettings(importer, normalizedPath);
+                return;
+            }
+
+            const string inventoryIconsPath = "Assets/BreakoutIsle/Art/UI/Icons/";
+            if (normalizedPath.StartsWith(inventoryIconsPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
+            {
+                ApplyIconSettings(importer);
+                return;
+            }
+
+            const string uiSkinsPath = "Assets/BreakoutIsle/Art/UI/Skins/";
+            if (normalizedPath.StartsWith(uiSkinsPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
+            {
+                ApplySkinSettings(importer);
+                return;
+            }
+
+            const string menuArtPath = "Assets/BreakoutIsle/Art/UI/Menu/";
+            if (normalizedPath.StartsWith(menuArtPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
+            {
+                ApplyIconSettings(importer);
                 return;
             }
 
@@ -65,7 +108,7 @@ namespace BreakoutIsle.Editor
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Multiple;
             importer.spritePixelsPerUnit = manifest.pixelsPerUnit;
-            importer.spritePivot = new Vector2(manifest.pivot.x, manifest.pivot.y);
+            SetSpritePivot(importer, manifest.pivot.x, manifest.pivot.y);
             importer.filterMode = FilterMode.Point;
             importer.mipmapEnabled = false;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
@@ -109,6 +152,86 @@ namespace BreakoutIsle.Editor
             importer.spritePixelsPerUnit = 32f;
             importer.spritePivot = new Vector2(0.5f, 0.5f);
             importer.alphaIsTransparency = true;
+        }
+
+        private static void ApplyPropSettings(TextureImporter importer, string normalizedPath)
+        {
+            const string propsRoot = "Assets/BreakoutIsle/Art/Environment/Prison/Props/";
+            var manifestPath = Path.Combine(propsRoot, "props.json");
+            var manifest = JsonUtility.FromJson<PropsManifest>(File.ReadAllText(manifestPath));
+            PropEntry entry = null;
+            var relativeFile = normalizedPath.Substring(propsRoot.Length).Replace('\\', '/');
+            if (manifest != null && manifest.props != null)
+            {
+                foreach (var prop in manifest.props)
+                {
+                    if (prop.file.Replace('\\', '/') == relativeFile)
+                    {
+                        entry = prop;
+                        break;
+                    }
+                }
+            }
+
+            if (entry == null || entry.size == null || entry.size.Length != 2 || entry.pivot == null || entry.pivot.Length != 2 || entry.pixelsPerUnit < 1)
+            {
+                Debug.LogError($"Prop texture '{normalizedPath}' has no valid entry in '{manifestPath}'.");
+                return;
+            }
+
+            importer.GetSourceTextureWidthAndHeight(out var width, out var height);
+            if (width != entry.size[0] || height != entry.size[1])
+            {
+                Debug.LogError($"Prop texture '{normalizedPath}' is {width}x{height}; its manifest expects {entry.size[0]}x{entry.size[1]}.");
+                return;
+            }
+
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = entry.pixelsPerUnit;
+            SetSpritePivot(importer, entry.pivot[0], entry.pivot[1]);
+            importer.filterMode = FilterMode.Point;
+            importer.mipmapEnabled = false;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.alphaIsTransparency = true;
+            importer.wrapMode = TextureWrapMode.Clamp;
+        }
+
+        private static void ApplyIconSettings(TextureImporter importer)
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 32f;
+            SetSpritePivot(importer, 0.5f, 0.5f);
+            importer.filterMode = FilterMode.Point;
+            importer.mipmapEnabled = false;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.alphaIsTransparency = true;
+            importer.wrapMode = TextureWrapMode.Clamp;
+        }
+
+        private static void ApplySkinSettings(TextureImporter importer)
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 32f;
+            SetSpritePivot(importer, 0.5f, 0.5f, new Vector4(8f, 8f, 8f, 8f));
+            importer.filterMode = FilterMode.Point;
+            importer.mipmapEnabled = false;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.alphaIsTransparency = true;
+            importer.wrapMode = TextureWrapMode.Clamp;
+        }
+
+        private static void SetSpritePivot(TextureImporter importer, float x, float y, Vector4? border = null)
+        {
+            var settings = new TextureImporterSettings();
+            importer.ReadTextureSettings(settings);
+            settings.spriteAlignment = (int)SpriteAlignment.Custom;
+            settings.spritePivot = new Vector2(x, y);
+            if (border.HasValue)
+                settings.spriteBorder = border.Value;
+            importer.SetTextureSettings(settings);
         }
     }
 }

@@ -33,6 +33,46 @@ namespace BreakoutIsle.Editor
                     AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
                 }
             }
+
+            var propsPath = Path.Combine(Application.dataPath, "BreakoutIsle", "Art", "Environment", "Prison", "Props");
+            if (Directory.Exists(propsPath))
+            {
+                foreach (var texturePath in Directory.GetFiles(propsPath, "*.png", SearchOption.AllDirectories))
+                {
+                    var assetPath = texturePath.Replace(Application.dataPath, "Assets").Replace('\\', '/');
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }
+            }
+
+            var iconsPath = Path.Combine(Application.dataPath, "BreakoutIsle", "Art", "UI", "Icons");
+            if (Directory.Exists(iconsPath))
+            {
+                foreach (var texturePath in Directory.GetFiles(iconsPath, "*.png", SearchOption.TopDirectoryOnly))
+                {
+                    var assetPath = "Assets/BreakoutIsle/Art/UI/Icons/" + Path.GetFileName(texturePath);
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }
+            }
+
+            var skinsPath = Path.Combine(Application.dataPath, "BreakoutIsle", "Art", "UI", "Skins");
+            if (Directory.Exists(skinsPath))
+            {
+                foreach (var texturePath in Directory.GetFiles(skinsPath, "*.png", SearchOption.TopDirectoryOnly))
+                {
+                    var assetPath = "Assets/BreakoutIsle/Art/UI/Skins/" + Path.GetFileName(texturePath);
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }
+            }
+
+            var menuPath = Path.Combine(Application.dataPath, "BreakoutIsle", "Art", "UI", "Menu");
+            if (Directory.Exists(menuPath))
+            {
+                foreach (var texturePath in Directory.GetFiles(menuPath, "*.png", SearchOption.AllDirectories))
+                {
+                    var assetPath = texturePath.Replace(Application.dataPath, "Assets").Replace('\\', '/');
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }
+            }
         }
 
         [System.Serializable]

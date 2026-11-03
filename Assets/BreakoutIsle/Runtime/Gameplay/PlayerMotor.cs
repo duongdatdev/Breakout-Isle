@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BreakoutIsle.Gameplay
 {
@@ -11,73 +10,48 @@ namespace BreakoutIsle.Gameplay
         private const float SprintSpeed = 6f;
         private const float InputDeadZone = 0.01f;
 
-        [SerializeField] private InputActionAsset inputActions;
-        [SerializeField] private string actionMapName = "Player";
-        [SerializeField] private string moveActionName = "Move";
-        [SerializeField] private string sprintActionName = "Sprint";
-        [SerializeField] private string sneakActionName = "Sneak";
-
         private Rigidbody2D _body;
-        private InputActionMap _actionMap;
-        private InputAction _moveAction;
-        private InputAction _sprintAction;
-        private InputAction _sneakAction;
-        private Vector2 _moveInput;
-        private bool _sprintHeld;
-        private bool _sneakHeld;
+        private Animator _animator;
+        private PlayerInputReader _input;
+        private Vector2 _facing = Vector2.down;
         private readonly StaminaMeter _stamina = new StaminaMeter();
 
         public float Stamina => _stamina.Current;
-        public Vector2 MoveInput => _moveInput;
+        public bool IsSneaking => _input != null && _input.SneakHeld;
+        public Vector2 MoveInput => _input == null ? Vector2.zero : _input.Move;
 
         private void Awake()
         {
             _body = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
+            _input = GetComponent<PlayerInputReader>();
             _body.gravityScale = 0f;
             _body.freezeRotation = true;
 
-            if (inputActions == null)
+            if (_input == null)
             {
-                Debug.LogError("PlayerMotor needs the project's InputActionAsset assigned.", this);
+                Debug.LogError("PlayerMotor needs a PlayerInputReader on the same GameObject.", this);
                 enabled = false;
-                return;
             }
-
-            _actionMap = inputActions.FindActionMap(actionMapName, throwIfNotFound: true);
-            _moveAction = _actionMap.FindAction(moveActionName, throwIfNotFound: true);
-            _sprintAction = _actionMap.FindAction(sprintActionName, throwIfNotFound: true);
-            _sneakAction = _actionMap.FindAction(sneakActionName, throwIfNotFound: true);
-        }
-
-        private void OnEnable()
-        {
-            if (_actionMap != null)
-                _actionMap.Enable();
-        }
-
-        private void OnDisable()
-        {
-            if (_actionMap != null)
-                _actionMap.Disable();
-        }
-
-        private void Update()
-        {
-            if (_moveAction == null)
-                return;
-
-            _moveInput = _moveAction.ReadValue<Vector2>();
-            _sprintHeld = _sprintAction.IsPressed();
-            _sneakHeld = _sneakAction.IsPressed();
         }
 
         private void FixedUpdate()
         {
-            var movement = MovementMath.NormalizeInput(_moveInput);
+            var movement = MovementMath.NormalizeInput(_input == null ? Vector2.zero : _input.Move);
             var isMoving = movement.sqrMagnitude > InputDeadZone * InputDeadZone;
-            var sprinting = _stamina.Tick(_sprintHeld && !_sneakHeld && isMoving, Time.fixedDeltaTime);
-            var speed = _sneakHeld ? SneakSpeed : sprinting ? SprintSpeed : WalkSpeed;
+            var sneaking = _input != null && _input.SneakHeld;
+            var sprinting = _stamina.Tick(_input != null && _input.SprintHeld && !sneaking && isMoving, Time.fixedDeltaTime);
+            var speed = sneaking ? SneakSpeed : sprinting ? SprintSpeed : WalkSpeed;
             _body.MovePosition(_body.position + movement * (speed * Time.fixedDeltaTime));
+
+            if (_animator != null)
+            {
+                if (isMoving)
+                    _facing = movement.normalized;
+                _animator.SetFloat("FacingX", _facing.x);
+                _animator.SetFloat("FacingY", _facing.y);
+                _animator.SetFloat("MoveMode", !isMoving ? 0f : sneaking ? 3f : sprinting ? 2f : 1f);
+            }
         }
     }
 

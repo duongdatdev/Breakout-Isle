@@ -27,6 +27,15 @@ namespace BreakoutIsle.Tests
         }
 
         [Test]
+        public void StandingSpritesSortByFeetPositionOnTheSharedActorLayer()
+        {
+            var closerToCamera = YSortRenderer.SortingOrderForY(2f, 100);
+            var fartherFromCamera = YSortRenderer.SortingOrderForY(3f, 100);
+
+            Assert.That(closerToCamera, Is.GreaterThan(fartherFromCamera));
+        }
+
+        [Test]
         public void StaminaDrainsAtTwentyPerSecondAndExhaustionDisablesSprint()
         {
             var stamina = new StaminaMeter();
