@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "props": [
+    {
+      "id": "bed",
+      "file": "bed.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "desk",
+      "file": "desk.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "locker_closed",
+      "file": "locker_closed.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "locker_open",
+      "file": "locker_open.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "gate_00",
+      "file": "gate_00.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "gate_01",
+      "file": "gate_01.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "gate_02",
+      "file": "gate_02.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "gate_03",
+      "file": "gate_03.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "vent_00",
+      "file": "vent_00.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "vent_01",
+      "file": "vent_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "vent_02",
+      "file": "vent_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "vent_03",
+      "file": "vent_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    }
+  ],
+  "animations": {
+    "gate": {
+      "frames": [
+        "gate_00",
+        "gate_01",
+        "gate_02",
+        "gate_03"
+      ],
+      "fps": 8,
+      "loop": false
+    },
+    "vent": {
+      "frames": [
+        "vent_00",
+        "vent_01",
+        "vent_02",
+        "vent_03"
+      ],
+      "fps": 8,
+      "loop": false
+    }
+  }
+}
