@@ -168,6 +168,132 @@
         0.5,
         0.5
       ]
+    },
+    {
+      "id": "pillow",
+      "file": "Dressing/pillow.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "blanket_roll",
+      "file": "Dressing/blanket_roll.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "mess_tray",
+      "file": "Dressing/mess_tray.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "tin_mug",
+      "file": "Dressing/tin_mug.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "bucket",
+      "file": "Dressing/bucket.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "soap",
+      "file": "Dressing/soap.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "laundry_bundle",
+      "file": "Dressing/laundry_bundle.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "paper_ball",
+      "file": "Dressing/paper_ball.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "rag",
+      "file": "Dressing/rag.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
     }
   ],
   "animations": {
