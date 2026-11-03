@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "icons": [
+    {
+      "id": "spoon",
+      "file": "spoon.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "keycard",
+      "file": "keycard.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "brass_key",
+      "file": "brass_key.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "wire_cutters",
+      "file": "wire_cutters.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "shovel",
+      "file": "shovel.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "map_fragment",
+      "file": "map_fragment.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "cipher_note",
+      "file": "cipher_note.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "civilian_clothes",
+      "file": "civilian_clothes.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "stone",
+      "file": "stone.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "tin_can",
+      "file": "tin_can.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "glass_bottle",
+      "file": "glass_bottle.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "firecracker",
+      "file": "firecracker.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "meat",
+      "file": "meat.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "energy_drink",
+      "file": "energy_drink.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "boat_key",
+      "file": "boat_key.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    },
+    {
+      "id": "port_pass",
+      "file": "port_pass.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32
+    }
+  ]
+}
