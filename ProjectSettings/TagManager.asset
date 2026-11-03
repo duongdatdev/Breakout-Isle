@@ -11,12 +11,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Guard
+  - World
+  - Interactable
+  - Hiding
+  - Vision
+  - Effects
   - 
   - 
   - 
@@ -40,4 +41,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1000
+    locked: 0
+  - name: Ground
+    uniqueID: 2000
+    locked: 0
+  - name: Props
+    uniqueID: 3000
+    locked: 0
+  - name: Actors
+    uniqueID: 4000
+    locked: 0
+  - name: Foreground
+    uniqueID: 5000
+    locked: 0
+  - name: UI
+    uniqueID: 6000
     locked: 0
