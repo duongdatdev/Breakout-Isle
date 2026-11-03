@@ -1,0 +1,277 @@
+{
+  "version": 1,
+  "events": {
+    "player.step.prison": [
+      "Footsteps/step_concrete_01.ogg",
+      "Footsteps/step_concrete_02.ogg",
+      "Footsteps/step_concrete_03.ogg",
+      "Footsteps/step_stone_01.ogg"
+    ],
+    "player.step.forest": [
+      "Footsteps/step_grass_01.ogg",
+      "Footsteps/step_grass_02.ogg",
+      "Footsteps/step_grass_03.ogg",
+      "Footsteps/step_leaves_01.ogg",
+      "Footsteps/step_leaves_02.ogg"
+    ],
+    "player.step.wood": [
+      "Footsteps/step_wood_01.ogg",
+      "Footsteps/step_wood_02.ogg",
+      "Footsteps/step_wood_03.ogg"
+    ],
+    "player.step.gravel": [
+      "Footsteps/step_gravel_01.ogg"
+    ],
+    "player.step.mud": [
+      "Footsteps/step_mud_01.ogg"
+    ],
+    "player.step.water": [
+      "Water/water_splash_01.wav",
+      "Water/water_splash_02.wav"
+    ],
+    "interaction.door.open": [
+      "Interactions/door_open.ogg"
+    ],
+    "interaction.door.close": [
+      "Interactions/door_close.ogg"
+    ],
+    "interaction.switch": [
+      "UI/ui_switch.ogg"
+    ],
+    "interaction.lock": [
+      "Interactions/metal_latch.ogg",
+      "Interactions/metal_click.ogg"
+    ],
+    "hazard.bear_trap.snap": [
+      "Interactions/metal_latch.ogg",
+      "Impacts/impact_metal_light.ogg"
+    ],
+    "interaction.pickup": [
+      "UI/ui_confirm.ogg",
+      "Interactions/item_coins.ogg"
+    ],
+    "interaction.paper": [
+      "Interactions/item_paper.ogg"
+    ],
+    "ui.click": [
+      "UI/ui_click.ogg"
+    ],
+    "ui.confirm": [
+      "UI/ui_confirm.ogg"
+    ],
+    "ui.cancel": [
+      "UI/ui_cancel.ogg"
+    ],
+    "ui.error": [
+      "UI/ui_error.ogg"
+    ],
+    "ui.panel.open": [
+      "UI/ui_open.ogg"
+    ],
+    "ui.checkpoint.saved": [
+      "UI/ui_confirm.ogg"
+    ],
+    "alert.guard": [
+      "Alerts/alarm.ogg"
+    ],
+    "alert.heartbeat": [
+      "Alerts/heartbeat.wav"
+    ],
+    "animal.dog.bark": [
+      "Animals/dog_bark.wav"
+    ],
+    "throw.impact.soft": [
+      "Impacts/impact_generic_light.ogg"
+    ],
+    "throw.impact.wood": [
+      "Impacts/impact_wood_light.ogg"
+    ],
+    "throw.impact.metal": [
+      "Impacts/impact_metal_light.ogg"
+    ],
+    "throw.impact.glass": [
+      "Impacts/impact_glass_light.ogg",
+      "Impacts/glass_break.ogg"
+    ],
+    "throw.firecracker": [
+      "Impacts/firecracker_pop_01.ogg"
+    ],
+    "ambience.prison": [
+      "Ambience/prison_ambience.ogg"
+    ],
+    "ambience.forest": [
+      "Ambience/forest_ambience.mp3"
+    ],
+    "ambience.city": [
+      "Ambience/city_ambience.mp3"
+    ],
+    "music.stealth": [
+      "Music/stealth_woods.mp3"
+    ],
+    "music.chase": [
+      "Music/infiltration.mp3"
+    ]
+  },
+  "assets": {
+    "Footsteps/step_concrete_01.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_concrete_000.ogg"
+    },
+    "Footsteps/step_concrete_02.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_concrete_002.ogg"
+    },
+    "Footsteps/step_concrete_03.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_concrete_004.ogg"
+    },
+    "Footsteps/step_grass_01.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_grass_000.ogg"
+    },
+    "Footsteps/step_grass_02.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_grass_002.ogg"
+    },
+    "Footsteps/step_grass_03.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_grass_004.ogg"
+    },
+    "Footsteps/step_wood_01.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_wood_000.ogg"
+    },
+    "Footsteps/step_wood_02.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_wood_002.ogg"
+    },
+    "Footsteps/step_wood_03.ogg": {
+      "source": "impact",
+      "file": "Audio/footstep_wood_004.ogg"
+    },
+    "Impacts/impact_glass_light.ogg": {
+      "source": "impact",
+      "file": "Audio/impactGlass_light_000.ogg"
+    },
+    "Impacts/impact_metal_light.ogg": {
+      "source": "impact",
+      "file": "Audio/impactMetal_light_000.ogg"
+    },
+    "Impacts/impact_wood_light.ogg": {
+      "source": "impact",
+      "file": "Audio/impactWood_light_000.ogg"
+    },
+    "Impacts/impact_generic_light.ogg": {
+      "source": "impact",
+      "file": "Audio/impactGeneric_light_000.ogg"
+    },
+    "UI/ui_click.ogg": {
+      "source": "interface",
+      "file": "Audio/click_001.ogg"
+    },
+    "UI/ui_confirm.ogg": {
+      "source": "interface",
+      "file": "Audio/confirmation_001.ogg"
+    },
+    "UI/ui_cancel.ogg": {
+      "source": "interface",
+      "file": "Audio/back_001.ogg"
+    },
+    "UI/ui_error.ogg": {
+      "source": "interface",
+      "file": "Audio/error_001.ogg"
+    },
+    "UI/ui_open.ogg": {
+      "source": "interface",
+      "file": "Audio/open_001.ogg"
+    },
+    "UI/ui_switch.ogg": {
+      "source": "interface",
+      "file": "Audio/switch_001.ogg"
+    },
+    "Impacts/glass_break.ogg": {
+      "source": "interface",
+      "file": "Audio/glass_001.ogg"
+    },
+    "Interactions/door_open.ogg": {
+      "source": "rpg",
+      "file": "Audio/doorOpen_1.ogg"
+    },
+    "Interactions/door_close.ogg": {
+      "source": "rpg",
+      "file": "Audio/doorClose_1.ogg"
+    },
+    "Interactions/metal_latch.ogg": {
+      "source": "rpg",
+      "file": "Audio/metalLatch.ogg"
+    },
+    "Interactions/metal_click.ogg": {
+      "source": "rpg",
+      "file": "Audio/metalClick.ogg"
+    },
+    "Interactions/item_coins.ogg": {
+      "source": "rpg",
+      "file": "Audio/handleCoins.ogg"
+    },
+    "Interactions/item_paper.ogg": {
+      "source": "rpg",
+      "file": "Audio/bookFlip1.ogg"
+    },
+    "Footsteps/step_stone_01.ogg": {
+      "source": "different_steps",
+      "file": "stone01.ogg"
+    },
+    "Footsteps/step_leaves_01.ogg": {
+      "source": "different_steps",
+      "file": "leaves01.ogg"
+    },
+    "Footsteps/step_leaves_02.ogg": {
+      "source": "different_steps",
+      "file": "leaves02.ogg"
+    },
+    "Footsteps/step_gravel_01.ogg": {
+      "source": "different_steps",
+      "file": "gravel.ogg"
+    },
+    "Footsteps/step_mud_01.ogg": {
+      "source": "different_steps",
+      "file": "mud02.ogg"
+    },
+    "Impacts/firecracker_pop_01.ogg": {
+      "source": "firework_pack",
+      "file": "fw_01.ogg"
+    },
+    "Animals/dog_bark.wav": {
+      "source": "dog_bark"
+    },
+    "Alerts/alarm.ogg": {
+      "source": "alarm"
+    },
+    "Water/water_splash_01.wav": {
+      "source": "water_splash_1"
+    },
+    "Water/water_splash_02.wav": {
+      "source": "water_splash_2"
+    },
+    "Ambience/forest_ambience.mp3": {
+      "source": "forest_ambience"
+    },
+    "Ambience/prison_ambience.ogg": {
+      "source": "prison_ambience"
+    },
+    "Ambience/city_ambience.mp3": {
+      "source": "city_ambience"
+    },
+    "Alerts/heartbeat.wav": {
+      "source": "heartbeat",
+      "source_file": "heartbeat.mp3_.flac",
+      "conversion": "FLAC to PCM s16le WAV; lossless; ffmpeg"
+    },
+    "Music/stealth_woods.mp3": {
+      "source": "stealth_woods"
+    },
+    "Music/infiltration.mp3": {
+      "source": "infiltration"
+    }
+  }
+}
