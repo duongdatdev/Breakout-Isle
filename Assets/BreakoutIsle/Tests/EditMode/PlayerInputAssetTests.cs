@@ -50,6 +50,25 @@ namespace BreakoutIsle.Tests
             Assert.That(southIdle.pivot.y, Is.EqualTo(4f).Within(0.001f));
         }
 
+        [Test]
+        public void PrisonTilesUseSinglePointFilteredSpritesAndAtlasStaysUnused()
+        {
+            const string tilePath = "Assets/BreakoutIsle/Art/Environment/Prison/Tiles/floor_clean.png";
+            const string atlasPath = "Assets/BreakoutIsle/Art/Environment/Prison/Tiles/prison-tiles-atlas.png";
+            var tile = AssetImporter.GetAtPath(tilePath) as TextureImporter;
+            var atlas = AssetImporter.GetAtPath(atlasPath) as TextureImporter;
+
+            Assert.That(tile, Is.Not.Null);
+            Assert.That(tile.textureType, Is.EqualTo(TextureImporterType.Sprite));
+            Assert.That(tile.spriteImportMode, Is.EqualTo(SpriteImportMode.Single));
+            Assert.That(tile.spritePixelsPerUnit, Is.EqualTo(32f));
+            Assert.That(tile.filterMode, Is.EqualTo(FilterMode.Point));
+            Assert.That(tile.mipmapEnabled, Is.False);
+            Assert.That(tile.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed));
+            Assert.That(atlas, Is.Not.Null);
+            Assert.That(atlas.textureType, Is.EqualTo(TextureImporterType.Default));
+        }
+
         private static void AssertBinding(InputActionMap map, string action, string path)
         {
             Assert.That(map.FindAction(action).bindings.Any(binding => binding.path == path), Is.True, $"{action} is missing {path}.");

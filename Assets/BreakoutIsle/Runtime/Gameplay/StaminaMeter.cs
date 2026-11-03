@@ -9,6 +9,7 @@ namespace BreakoutIsle.Gameplay
         private readonly float _recoveryPerSecond;
         private readonly float _recoveryDelay;
         private float _timeSinceSprint;
+        private bool _exhausted;
 
         public float Current { get; private set; }
 
@@ -29,19 +30,34 @@ namespace BreakoutIsle.Gameplay
 
             if (sprintRequested)
             {
-                _timeSinceSprint = 0f;
-                if (Current <= 0f)
+                if (_exhausted || Current <= 0f)
+                {
+                    _exhausted = true;
+                    Recover(deltaTime);
                     return false;
+                }
 
+                _timeSinceSprint = 0f;
                 Current = Mathf.Max(0f, Current - _drainPerSecond * deltaTime);
+                _exhausted = Current <= 0f;
                 return true;
             }
 
-            _timeSinceSprint += deltaTime;
-            if (_timeSinceSprint > _recoveryDelay)
-                Current = Mathf.Min(_maximum, Current + _recoveryPerSecond * deltaTime);
+            _exhausted = false;
+            Recover(deltaTime);
 
             return false;
+        }
+
+        private void Recover(float deltaTime)
+        {
+            var timeBefore = _timeSinceSprint;
+            _timeSinceSprint += deltaTime;
+            var recoveryTime = Mathf.Clamp(_timeSinceSprint - _recoveryDelay, 0f, deltaTime);
+            if (timeBefore >= _recoveryDelay)
+                recoveryTime = deltaTime;
+
+            Current = Mathf.Min(_maximum, Current + _recoveryPerSecond * recoveryTime);
         }
     }
 }

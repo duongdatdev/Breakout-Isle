@@ -32,6 +32,14 @@ namespace BreakoutIsle.Editor
             if (importer == null)
                 return;
 
+            var normalizedPath = assetPath.Replace('\\', '/');
+            const string prisonTilesPath = "Assets/BreakoutIsle/Art/Environment/Prison/Tiles/";
+            if (normalizedPath.StartsWith(prisonTilesPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
+            {
+                ApplyTileSettings(importer, Path.GetFileName(normalizedPath) == "prison-tiles-atlas.png");
+                return;
+            }
+
             var manifestPath = Path.Combine(Path.GetDirectoryName(assetPath) ?? string.Empty, "unity-import-settings.json");
             if (!File.Exists(manifestPath))
                 return;
@@ -82,6 +90,25 @@ namespace BreakoutIsle.Editor
 
             importer.spritesheet = sprites;
 #pragma warning restore 0618
+        }
+
+        private static void ApplyTileSettings(TextureImporter importer, bool isAtlas)
+        {
+            importer.filterMode = FilterMode.Point;
+            importer.mipmapEnabled = false;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.wrapMode = TextureWrapMode.Clamp;
+            if (isAtlas)
+            {
+                importer.textureType = TextureImporterType.Default;
+                return;
+            }
+
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 32f;
+            importer.spritePivot = new Vector2(0.5f, 0.5f);
+            importer.alphaIsTransparency = true;
         }
     }
 }

@@ -45,11 +45,29 @@ namespace BreakoutIsle.Tests
             var stamina = new StaminaMeter();
             stamina.Tick(true, 1f);
 
-            stamina.Tick(false, 1f);
+            stamina.Tick(false, 0.75f);
             Assert.That(stamina.Current, Is.EqualTo(80f).Within(0.001f));
 
             stamina.Tick(false, 0.5f);
+            Assert.That(stamina.Current, Is.EqualTo(83.75f).Within(0.001f));
+
+            stamina.Tick(false, 0.25f);
             Assert.That(stamina.Current, Is.EqualTo(87.5f).Within(0.001f));
+        }
+
+        [Test]
+        public void ExhaustionAllowsRecoveryButRequiresShiftReleaseBeforeSprintingAgain()
+        {
+            var stamina = new StaminaMeter();
+
+            Assert.That(stamina.Tick(true, 5f), Is.True);
+            Assert.That(stamina.Current, Is.EqualTo(0f));
+            Assert.That(stamina.Tick(true, 1.1f), Is.False);
+            Assert.That(stamina.Current, Is.EqualTo(1.5f).Within(0.001f));
+            Assert.That(stamina.Tick(true, 0.1f), Is.False);
+
+            stamina.Tick(false, 0.1f);
+            Assert.That(stamina.Tick(true, 0.01f), Is.True);
         }
     }
 }

@@ -23,6 +23,16 @@ namespace BreakoutIsle.Editor
                 if (File.Exists(Path.Combine(Application.dataPath, assetPath.Substring("Assets/".Length))))
                     AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
             }
+
+            var tilesPath = Path.Combine(Application.dataPath, "BreakoutIsle", "Art", "Environment", "Prison", "Tiles");
+            if (Directory.Exists(tilesPath))
+            {
+                foreach (var texturePath in Directory.GetFiles(tilesPath, "*.png", SearchOption.TopDirectoryOnly))
+                {
+                    var assetPath = "Assets/BreakoutIsle/Art/Environment/Prison/Tiles/" + Path.GetFileName(texturePath);
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }
+            }
         }
 
         [System.Serializable]
