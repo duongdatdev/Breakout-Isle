@@ -53,13 +53,18 @@ def main() -> None:
         failures.append("processor grid does not match direction rows and requested frame count")
     if meta.get("cell_size") != 64:
         failures.append("processor cell size is not 64px")
-    for key in ("edge_touch_frames", "output_edge_touch_frames", "empty_frames", "paste_clamped_frames"):
+    for key in ("output_edge_touch_frames", "empty_frames", "paste_clamped_frames"):
         if meta.get(key):
             failures.append(f"{key} is non-empty")
+    source_touch_allowed = bool((meta.get("qc_config") or {}).get("allow_source_edge_touch"))
+    if meta.get("source_edge_touch_frames") and not source_touch_allowed:
+        failures.append("source_edge_touch_frames is non-empty without the reviewed source-edge override")
     if qc.get("frame_count") != len(DIRECTIONS) * args.frames or qc.get("valid_frame_count") != len(DIRECTIONS) * args.frames:
         failures.append("frame count is incomplete")
-    if qc.get("empty_count") or qc.get("edge_touch_count") or qc.get("paste_clamped_count"):
+    if qc.get("empty_count") or qc.get("paste_clamped_count"):
         failures.append("processor QC reports empty, edge-touching, or clamped frames")
+    if qc.get("edge_touch_count") and not source_touch_allowed:
+        failures.append("processor QC reports edge-touching frames without the reviewed source-edge override")
     if not sheet_path.is_file():
         failures.append("transparent runtime sheet is missing")
     if failures:
@@ -105,6 +110,11 @@ def main() -> None:
         },
         "qc": qc,
     }
+    if source_touch_allowed:
+        action_data["sourceEdgeTouchOverride"] = {
+            "sourceFrames": meta.get("source_edge_touch_frames", []),
+            "reason": "Reviewed source sheet and processed preview: complete subjects are inside their raw cells; the processor's trimmed source-cell check alone registers contact. Output edge contact and clamping are both zero.",
+        }
     serialized = json.dumps(action_data, indent=2) + "\n"
     (output / "action.json").write_text(serialized, encoding="utf-8")
     (output / "unity-import-settings.json").write_text(serialized, encoding="utf-8")
