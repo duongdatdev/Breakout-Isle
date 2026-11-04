@@ -170,6 +170,230 @@
       ]
     },
     {
+      "id": "chest_00",
+      "file": "chest_00.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "chest_01",
+      "file": "chest_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "chest_02",
+      "file": "chest_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "chest_03",
+      "file": "chest_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "laundry_cart_00",
+      "file": "laundry_cart_00.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "laundry_cart_01",
+      "file": "laundry_cart_01.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "laundry_cart_02",
+      "file": "laundry_cart_02.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "laundry_cart_03",
+      "file": "laundry_cart_03.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "feet",
+      "pivot": [
+        0.5,
+        0.0625
+      ]
+    },
+    {
+      "id": "camera_00",
+      "file": "camera_00.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "mount",
+      "pivot": [
+        0.72,
+        0.16
+      ]
+    },
+    {
+      "id": "camera_01",
+      "file": "camera_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "mount",
+      "pivot": [
+        0.72,
+        0.16
+      ]
+    },
+    {
+      "id": "camera_02",
+      "file": "camera_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "mount",
+      "pivot": [
+        0.72,
+        0.16
+      ]
+    },
+    {
+      "id": "camera_03",
+      "file": "camera_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "mount",
+      "pivot": [
+        0.72,
+        0.16
+      ]
+    },
+    {
+      "id": "breaker_00",
+      "file": "breaker_00.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "breaker_01",
+      "file": "breaker_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "breaker_02",
+      "file": "breaker_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "breaker_03",
+      "file": "breaker_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "anchor": "center",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    {
       "id": "pillow",
       "file": "Dressing/pillow.png",
       "size": [
@@ -316,6 +540,47 @@
       ],
       "fps": 8,
       "loop": false
+    },
+    "chest": {
+      "frames": [
+        "chest_00",
+        "chest_01",
+        "chest_02",
+        "chest_03"
+      ],
+      "fps": 8,
+      "loop": false
+    },
+    "laundry_cart": {
+      "frames": [
+        "laundry_cart_00",
+        "laundry_cart_01",
+        "laundry_cart_02",
+        "laundry_cart_03"
+      ],
+      "fps": 8,
+      "loop": false
+    },
+    "breaker": {
+      "frames": [
+        "breaker_00",
+        "breaker_01",
+        "breaker_02",
+        "breaker_03"
+      ],
+      "fps": 8,
+      "loop": false
+    },
+    "camera": {
+      "frames": [
+        "camera_00",
+        "camera_01",
+        "camera_02",
+        "camera_03"
+      ],
+      "fps": 8,
+      "loop": true,
+      "playback": "ping-pong"
     }
   }
 }
