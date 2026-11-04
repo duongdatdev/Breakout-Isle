@@ -24,6 +24,7 @@ namespace BreakoutIsle.Gameplay
         public LevelSession Session => session;
         public IPlayerInteractable Current => _current;
         public event Action<string> PromptChanged;
+        public event Action<string> Interacted;
 
         private void Awake()
         {
@@ -47,7 +48,11 @@ namespace BreakoutIsle.Gameplay
         public void TryInteract()
         {
             var target = FindClosestInteractable();
-            if (target != null && target.CanInteract(this)) target.Interact(this);
+            if (target != null && target.CanInteract(this))
+            {
+                target.Interact(this);
+                Interacted?.Invoke(target.StableId);
+            }
         }
 
         private IPlayerInteractable FindClosestInteractable()
@@ -65,14 +70,14 @@ namespace BreakoutIsle.Gameplay
                 if (!(behaviour is IPlayerInteractable candidate) || !candidate.CanInteract(this)) continue;
                 var targetPosition = behaviour.transform.position;
                 var distance = ((Vector2)targetPosition - (Vector2)transform.position).sqrMagnitude;
-                if (distance >= bestDistance || IsOccluded(targetPosition, collider, playerColliders)) continue;
+                if (distance >= bestDistance || IsOccluded(targetPosition, collider, behaviour.transform, playerColliders)) continue;
                 best = candidate;
                 bestDistance = distance;
             }
             return best;
         }
 
-        private bool IsOccluded(Vector2 targetPosition, Collider2D targetCollider, Collider2D[] playerColliders)
+        private bool IsOccluded(Vector2 targetPosition, Collider2D targetCollider, Transform targetTransform, Collider2D[] playerColliders)
         {
             var offset = targetPosition - (Vector2)transform.position;
             var distance = offset.magnitude;
@@ -80,7 +85,8 @@ namespace BreakoutIsle.Gameplay
             var mask = obstacleMask.value == 0 ? Physics2D.AllLayers : obstacleMask.value;
             foreach (var hit in Physics2D.RaycastAll(transform.position, offset / distance, distance, mask))
             {
-                if (hit.collider == null || hit.collider == targetCollider) continue;
+                if (hit.collider == null || hit.collider == targetCollider ||
+                    hit.collider.transform == targetTransform || hit.collider.transform.IsChildOf(targetTransform)) continue;
                 var isPlayerCollider = false;
                 foreach (var ownCollider in playerColliders)
                     if (hit.collider == ownCollider) { isPlayerCollider = true; break; }

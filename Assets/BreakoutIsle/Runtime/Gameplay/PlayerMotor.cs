@@ -19,8 +19,11 @@ namespace BreakoutIsle.Gameplay
         private float _footstepNoiseTimer;
         private bool _lastStepSneaking;
         private bool _lastStepSprintRequested;
+        private bool _lastStepFreeSprint;
+        private float _freeSprintTime;
 
         public float Stamina => _stamina.Current;
+        public Vector2 FacingDirection => _facing;
         public bool IsSneaking => _input != null && _input.SneakHeld;
         public Vector2 MoveInput => _input == null ? Vector2.zero : _input.Move;
 
@@ -45,19 +48,23 @@ namespace BreakoutIsle.Gameplay
             var actualDelta = _body.position - _previousPhysicsPosition;
             _previousPhysicsPosition = _body.position;
             var actuallyMoving = actualDelta.sqrMagnitude > InputDeadZone * InputDeadZone;
-            var sprintedThisStep = _stamina.Tick(_lastStepSprintRequested && actuallyMoving, Time.fixedDeltaTime);
+            var staminaSprint = _stamina.Tick(_lastStepSprintRequested && actuallyMoving && !_lastStepFreeSprint, Time.fixedDeltaTime);
+            var sprintedThisStep = actuallyMoving && _lastStepSprintRequested && (_lastStepFreeSprint || staminaSprint);
             EmitFootstepNoise(actuallyMoving, _lastStepSneaking, sprintedThisStep, Time.fixedDeltaTime);
 
             var movement = MovementMath.NormalizeInput(_input == null ? Vector2.zero : _input.Move);
             var sneaking = _input != null && _input.SneakHeld;
             var hasMoveInput = movement.sqrMagnitude > InputDeadZone * InputDeadZone;
             var sprintRequested = _input != null && _input.SprintHeld && !sneaking && hasMoveInput;
-            var sprinting = sprintRequested && _stamina.CanSprint;
+            var freeSprint = _freeSprintTime > 0f;
+            var sprinting = sprintRequested && (freeSprint || _stamina.CanSprint);
             var speed = sneaking ? SneakSpeed : sprinting ? SprintSpeed : WalkSpeed;
             if (hasMoveInput)
                 _body.MovePosition(_body.position + movement * (speed * Time.fixedDeltaTime));
             _lastStepSneaking = sneaking;
             _lastStepSprintRequested = sprintRequested;
+            _lastStepFreeSprint = sprinting && freeSprint;
+            _freeSprintTime = Mathf.Max(0f, _freeSprintTime - Time.fixedDeltaTime);
 
             if (_animator != null)
             {
@@ -84,11 +91,18 @@ namespace BreakoutIsle.Gameplay
             _footstepNoiseTimer = sprinting ? 0.28f : 0.42f;
         }
 
+        public void ApplyEnergyDrink()
+        {
+            _stamina.RestoreFull();
+            _freeSprintTime = 5f;
+        }
+
         public void RestoreAt(Vector3 position)
         {
             var stealthState = GetComponent<PlayerStealthState>();
             if (stealthState != null) stealthState.ResetTransientState(position);
             else transform.position = position;
+            GetComponent<PlayerActionAnimator>()?.StopAction();
             if (_body != null)
             {
                 _body.position = position;
@@ -100,6 +114,8 @@ namespace BreakoutIsle.Gameplay
             _previousPhysicsPosition = position;
             _lastStepSneaking = false;
             _lastStepSprintRequested = false;
+            _lastStepFreeSprint = false;
+            _freeSprintTime = 0f;
             _facing = Vector2.down;
             if (_animator != null)
             {

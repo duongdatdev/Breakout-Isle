@@ -37,6 +37,8 @@ namespace BreakoutIsle.Gameplay
         public static event Action<Vector2, float> Emitted;
 
         public static void Emit(Vector2 position, float radius) => Emitted?.Invoke(position, radius);
+
+        public static bool EmitNearest(Vector2 position, float radius) => GuardBrain.InvestigateNearestNoise(position, radius);
     }
 
     [RequireComponent(typeof(Rigidbody2D))]
@@ -199,7 +201,7 @@ namespace BreakoutIsle.Gameplay
             }
 
             _detection = Mathf.MoveTowards(_detection, 0f, Time.deltaTime * 0.5f);
-            if (State == GuardState.Suspicious && Vector2.Distance(transform.position, _investigatePosition) < 0.25f)
+            if (State == GuardState.Suspicious && Vector2.Distance(transform.position, _investigatePosition) < 0.36f)
                 SetState(GuardState.Patrol);
             if (State == GuardState.Alert)
             {
@@ -288,7 +290,7 @@ namespace BreakoutIsle.Gameplay
                 return;
             }
             MoveToward(point.position, patrolSpeed);
-            if (Vector2.Distance(transform.position, point.position) < 0.15f)
+            if (Vector2.Distance(transform.position, point.position) < 0.36f)
                 _patrolIndex = (_patrolIndex + 1) % patrolPoints.Length;
         }
 
@@ -384,6 +386,23 @@ namespace BreakoutIsle.Gameplay
             return false;
         }
 
+        public static bool InvestigateNearestNoise(Vector2 position, float radius)
+        {
+            GuardBrain nearest = null;
+            var nearestDistance = radius;
+            foreach (var guard in Active)
+            {
+                if (guard == null || guard.State == GuardState.Chase) continue;
+                var distance = Vector2.Distance(guard.transform.position, position);
+                if (distance > nearestDistance) continue;
+                nearest = guard;
+                nearestDistance = distance;
+            }
+            if (nearest == null) return false;
+            nearest.Investigate(position);
+            return true;
+        }
+
         private bool CanObservePosition(Vector2 position)
         {
             var offset = position - (Vector2)transform.position;
@@ -397,8 +416,14 @@ namespace BreakoutIsle.Gameplay
             if (spot == null) return false;
             var exitDelta = spot.InspectionPosition - _body.position;
             if (exitDelta.magnitude > 0.7f) return false;
-            return exitDelta.sqrMagnitude <= 0.001f ||
-                   !Physics2D.Raycast(_body.position, exitDelta.normalized, exitDelta.magnitude, lineOfSightObstacles);
+            if (exitDelta.sqrMagnitude <= 0.001f) return true;
+            foreach (var hit in Physics2D.RaycastAll(_body.position, exitDelta.normalized, exitDelta.magnitude, lineOfSightObstacles))
+            {
+                if (hit.collider == null || hit.collider.GetComponentInParent<HidingSpot>() == spot)
+                    continue;
+                return false;
+            }
+            return true;
         }
 
         public static void ResetAllToBaseline()
