@@ -1,0 +1,259 @@
+{
+  "version": 1,
+  "props": [
+    {
+      "id": "hiding_bush",
+      "file": "hiding_bush.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "hiding_place",
+      "occlusionPolicy": "fade_when_occluding_player"
+    },
+    {
+      "id": "fern",
+      "file": "fern.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "dressing",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "moss_rock",
+      "file": "moss_rock.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "blocker",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "stump",
+      "file": "stump.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "blocker",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "fallen_branch",
+      "file": "fallen_branch.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "dressing",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "mushrooms",
+      "file": "mushrooms.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "dressing",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "reeds",
+      "file": "reeds.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "dressing",
+      "occlusionPolicy": "fade_when_occluding_player"
+    },
+    {
+      "id": "woodland_flowers",
+      "file": "woodland_flowers.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "dressing",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "pebbles",
+      "file": "pebbles.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "dressing",
+      "occlusionPolicy": "normal"
+    },
+    {
+      "id": "broadleaf_tree",
+      "file": "broadleaf_tree.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "blocker",
+      "occlusionPolicy": "fade_when_occluding_player"
+    },
+    {
+      "id": "tent",
+      "file": "tent.png",
+      "size": [
+        96,
+        96
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.0625
+      ],
+      "anchor": "feet",
+      "role": "blocker",
+      "occlusionPolicy": "fade_when_occluding_player"
+    },
+    {
+      "id": "bear_trap_00",
+      "file": "bear_trap_00.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "hazard"
+    },
+    {
+      "id": "bear_trap_01",
+      "file": "bear_trap_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "hazard"
+    },
+    {
+      "id": "bear_trap_02",
+      "file": "bear_trap_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "hazard"
+    },
+    {
+      "id": "bear_trap_03",
+      "file": "bear_trap_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "hazard"
+    }
+  ],
+  "animations": {
+    "bear_trap": {
+      "frames": [
+        "bear_trap_00",
+        "bear_trap_01",
+        "bear_trap_02",
+        "bear_trap_03"
+      ],
+      "fps": 10,
+      "loop": false,
+      "states": [
+        "armed",
+        "closing",
+        "snapped",
+        "spent"
+      ]
+    }
+  }
+}
