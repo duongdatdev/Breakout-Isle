@@ -1,0 +1,3 @@
+All accepted action exports use a single shared scale across each raw action sheet; crouching changes pose bounds without individually resizing poses. Accepted standing front-frame alpha bounds at 64px: idle (18,11)-(46,59), hide-enter (18,11)-(45,59), hide-exit (16,9)-(47,59), caught (16,9)-(48,59). Feet remain at y=59; standing heights differ by at most two pixels.
+
+A preserve-mode trial at fit-scale0.96 put the anchor at y=63 and failed strict QC due to bottom-edge clamping. It was rejected. The accepted hide/caught sheets use shared fit-scale0.82, feet alignment and strict nonempty/edge/clamping checks; no QC override is used.
