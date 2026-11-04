@@ -1,4 +1,5 @@
 """Verify delivered directional animations contain usable, distinct runtime frames."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -14,12 +15,21 @@ REQUIRED = {
     'RookPrison': ['idle', 'walk', 'run', 'sneak', 'interact', 'throw',
                    'hide-enter', 'hide-exit', 'caught', 'crawl', 'pry', 'climb'],
     'Guard': ['idle', 'walk', 'run', 'search', 'capture'],
+    'RookCivilian': ['idle', 'walk', 'run', 'sneak', 'interact', 'throw',
+                     'hide-enter', 'hide-exit', 'caught'],
+    'PoliceDog': ['idle', 'walk', 'run', 'sniff', 'bark', 'eat'],
 }
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--character', action='append', choices=REQUIRED,
+                        help='Audit selected complete bundles; default audits every required bundle.')
+    args = parser.parse_args()
     failures = []
     reports = []
     for character, actions in REQUIRED.items():
+        if args.character and character not in args.character:
+            continue
         for action in actions:
             folder = CHARACTERS / character / action
             manifest_path = folder / 'action.json'
