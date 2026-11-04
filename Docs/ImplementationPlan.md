@@ -1,6 +1,6 @@
 # Breakout Isle — approved implementation contract
 
-Approved 2026-11-03. Implementer: gpt-6-luna. Root agent coordinates art, audio, reviews and Unity verification. Continue automatically after a passed checkpoint. Stop immediately if Unity MCP is unavailable; do not substitute an unverified scene or claim a checkpoint passed.
+Approved 2026-11-03. Implementer: gpt-6-luna. Root agent coordinates art, audio, reviews and Unity verification. Continue automatically after a passed checkpoint. Update authorized by the user on 2026-11-04: when Unity MCP is unavailable, use the terminal to open Unity, restart the local MCP server/bridge, or perform necessary Unity operations. Verify the correct Editor/project and actual compile/runtime results after recovery; do not claim unverified acceptance.
 
 ## Product
 
@@ -60,4 +60,4 @@ Each checkpoint has small independent commits; passing requires code, relevant f
 - Before Unity tools, check mcpforunity://editor/state and correct instance. Inspect APIs with unity_reflect and actual installed source before using uncertain Unity APIs. After changes await compilation and check console; save scene/assets. Avoid simultaneous Editor mutation by multiple agents.
 - Small logical Conventional Commits: feat(scope):, fix(scope):, test:, docs:, refactor:, chore:. Include related .meta/Animator/prefab together. Stage explicit paths/hunks, never git add .; do not stage pre-existing user changes. Do not push. Never commit compile errors or dangling references.
 - EditMode tests: normalized input/stamina, objectives/valves, snapshot/pickup integrity/corrupt-save handling. PlayMode: line of sight/state transitions/noise/hiding/dogs/interactions/scene changes. Save acceptance: before/after each checkpoint, consume/pickup/retry, quit/relaunch, finale timer. Visual QA every direction/action and actual Unity camera, sorting, 720p/1080p HUD. Test a valid complete route in every level and continuous campaign. Target 60 FPS at 1080p; report actual hardware and measurements.
-- Every checkpoint report includes completed tasks, tests, visual evidence, commit IDs, remaining work and next checkpoint. Continue automatically after pass. MCP loss stops all implementation immediately per user request.
+- Every checkpoint report includes completed tasks, tests, visual evidence, commit IDs, remaining work and next checkpoint. Continue automatically after pass. MCP loss triggers the terminal recovery authorized on 2026-11-04; resume Editor mutations only after verifying the correct instance and readiness. If recovery fails, report the concrete blocker.
