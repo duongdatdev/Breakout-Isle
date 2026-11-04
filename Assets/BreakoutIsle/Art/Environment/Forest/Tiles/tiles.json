@@ -1,0 +1,281 @@
+{
+  "source": "raw-tiles.png",
+  "artSource": "built-in image_gen",
+  "rows": 4,
+  "columns": 4,
+  "tiles": [
+    {
+      "id": "grass_dark",
+      "file": "grass_dark.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        3,
+        311,
+        311
+      ],
+      "collider": "none",
+      "terrain": "grass_dark"
+    },
+    {
+      "id": "grass_worn",
+      "file": "grass_worn.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        3,
+        624,
+        311
+      ],
+      "collider": "none",
+      "terrain": "grass_worn"
+    },
+    {
+      "id": "leaf_earth",
+      "file": "leaf_earth.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        3,
+        937,
+        311
+      ],
+      "collider": "none",
+      "terrain": "leaf_earth"
+    },
+    {
+      "id": "earth_path",
+      "file": "earth_path.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        3,
+        1251,
+        311
+      ],
+      "collider": "none",
+      "terrain": "earth_path"
+    },
+    {
+      "id": "mud",
+      "file": "mud.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        317,
+        311,
+        624
+      ],
+      "collider": "none",
+      "terrain": "mud"
+    },
+    {
+      "id": "water_shallow",
+      "file": "water_shallow.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        317,
+        624,
+        624
+      ],
+      "collider": "none",
+      "terrain": "water_shallow"
+    },
+    {
+      "id": "water_deep",
+      "file": "water_deep.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        317,
+        937,
+        624
+      ],
+      "collider": "none",
+      "terrain": "water_deep"
+    },
+    {
+      "id": "moss_paving",
+      "file": "moss_paving.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        317,
+        1251,
+        624
+      ],
+      "collider": "none",
+      "terrain": "moss_paving"
+    },
+    {
+      "id": "grass_left",
+      "file": "grass_left.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        630,
+        311,
+        937
+      ],
+      "collider": "none",
+      "terrain": "grass_left"
+    },
+    {
+      "id": "grass_right",
+      "file": "grass_right.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        630,
+        624,
+        937
+      ],
+      "collider": "none",
+      "terrain": "grass_right"
+    },
+    {
+      "id": "grass_top",
+      "file": "grass_top.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        630,
+        937,
+        937
+      ],
+      "collider": "none",
+      "terrain": "grass_top"
+    },
+    {
+      "id": "grass_bottom",
+      "file": "grass_bottom.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        630,
+        1251,
+        937
+      ],
+      "collider": "none",
+      "terrain": "grass_bottom"
+    },
+    {
+      "id": "shore_left",
+      "file": "shore_left.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        943,
+        311,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "shore_left"
+    },
+    {
+      "id": "shore_right",
+      "file": "shore_right.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        943,
+        624,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "shore_right"
+    },
+    {
+      "id": "shore_top",
+      "file": "shore_top.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        943,
+        937,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "shore_top"
+    },
+    {
+      "id": "shore_bottom",
+      "file": "shore_bottom.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        943,
+        1251,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "shore_bottom"
+    }
+  ],
+  "postprocess": "fixed cell crop, 3px separator trim, nearest-neighbor downsample"
+}
