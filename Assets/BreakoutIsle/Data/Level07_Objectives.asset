@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level07_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: city-07
+  steps:
+  - id: civilian_clothes_found
+    description: "Take civilian clothes from the washing line"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "civilian_clothes"
+  - id: pawnshop_owner_distracted
+    description: "Distract the pawnshop owner"
+    prerequisiteId: "civilian_clothes_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: pawnshop_safe_key_found
+    description: "Find the pawnshop safe key"
+    prerequisiteId: "pawnshop_owner_distracted"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "pawnshop_safe_key"
+  - id: cipher_note_found
+    description: "Open the safe and take the cipher note"
+    prerequisiteId: "pawnshop_safe_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "pawnshop_safe_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: "cipher_note"
+  - id: city_transition_opened
+    description: "Use the cipher note to find the sewer entrance"
+    prerequisiteId: "cipher_note_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "cipher_note"
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da14800a8d64b9db9c3b495376bd7f7, type: 3}
+  m_Name: CampaignLevel08
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.CampaignLevelDefinition
+  levelId: city-08
+  sceneName: Level08_Sewer
+  initialCheckpointId: city-08-start
+  nextLevel: {fileID: 11400000, guid: 68bcbb2b57f657eaa6b0731471cd2de7, type: 2}
+  isFinalLevel: 0
+  carryQuestItemIdsToNextLevel: []

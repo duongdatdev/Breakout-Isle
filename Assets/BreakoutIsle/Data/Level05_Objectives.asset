@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level05_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: forest-05
+  steps:
+  - id: dam_gate_lowered
+    description: "Lower the swamp water at the dam lever"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: watchtower_chest_key_found
+    description: "Find the watchtower chest key"
+    prerequisiteId: "dam_gate_lowered"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "swamp_chest_key"
+  - id: skiff_key_found
+    description: "Open the chest and take the skiff key"
+    prerequisiteId: "watchtower_chest_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "swamp_chest_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: "skiff_key"
+  - id: skiff_exit_opened
+    description: "Unlock the skiff exit"
+    prerequisiteId: "skiff_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "skiff_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: ""

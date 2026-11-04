@@ -32,6 +32,7 @@ namespace BreakoutIsle.Gameplay
             if (string.IsNullOrWhiteSpace(objectiveId))
             {
                 SetCollected(true);
+                player.Session.NotifyInventoryChanged();
                 return;
             }
             if (!player.Session.CompleteObjective(objectiveId))

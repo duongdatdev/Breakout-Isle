@@ -17,6 +17,7 @@ namespace BreakoutIsle.Gameplay
         public string OutfitId => outfitId;
         public int SelectedSupportSlot => selectedSupportSlot;
         public IReadOnlyList<StoryFlagRecord> PersistentStoryFlags => persistentStoryFlags;
+        public event Action InventoryChanged;
         public event Action<string> MessageShown;
         public event Action<string> ObjectiveCompleted;
         public event Action QuestCompleted;
@@ -35,6 +36,7 @@ namespace BreakoutIsle.Gameplay
             Progress = new ObjectiveProgress(objectives, Inventory);
             Progress.Completed += step =>
             {
+                InventoryChanged?.Invoke();
                 ObjectiveCompleted?.Invoke(step.id);
                 if (Progress.Current == null) QuestCompleted?.Invoke();
             };
@@ -47,6 +49,7 @@ namespace BreakoutIsle.Gameplay
             selectedSupportSlot = 0;
             persistentStoryFlags = new List<StoryFlagRecord>();
             InitializeRuntimeState();
+            InventoryChanged?.Invoke();
         }
 
         public bool CompleteObjective(string objectiveId)
@@ -59,10 +62,39 @@ namespace BreakoutIsle.Gameplay
 
         public void ShowMessage(string message) => MessageShown?.Invoke(message);
 
+        internal void NotifyInventoryChanged() => InventoryChanged?.Invoke();
+
         public bool SetSelectedSupportSlot(int slot)
         {
             if (slot < 0 || slot > 2) return false;
             selectedSupportSlot = slot;
+            InventoryChanged?.Invoke();
+            return true;
+        }
+
+        public bool TryAddSupportItem(string itemId, out int slot)
+        {
+            slot = -1;
+            if (Inventory == null || !Inventory.TryAddSupportItem(itemId, out slot))
+            {
+                ShowMessage("Túi đồ đã đầy.");
+                return false;
+            }
+            InventoryChanged?.Invoke();
+            return true;
+        }
+
+        public bool TryConsumeSelectedSupportItem(out string itemId)
+        {
+            return TryConsumeSupportItemAt(selectedSupportSlot, out itemId);
+        }
+
+        public bool TryConsumeSupportItemAt(int slot, out string itemId)
+        {
+            itemId = null;
+            if (Inventory == null || !Inventory.TryRemoveSupportItemAt(slot, out itemId))
+                return false;
+            InventoryChanged?.Invoke();
             return true;
         }
 
@@ -114,6 +146,7 @@ namespace BreakoutIsle.Gameplay
             persistentStoryFlags = new List<StoryFlagRecord>();
             foreach (var flag in snapshot.storyFlags)
                 persistentStoryFlags.Add(new StoryFlagRecord { id = flag.id, value = flag.value });
+            InventoryChanged?.Invoke();
             return true;
         }
     }

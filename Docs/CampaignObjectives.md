@@ -47,9 +47,10 @@ Each level uses its own objective IDs. Quest item IDs are also level-scoped unle
 | 9 — Night market and police station | `market_cameras_disabled` | Operate camera power switch | — |
 |  | `port_pass_found` | Pick up `port_pass`; requires `market_cameras_disabled` | Checkpoint after pass; preserve pass for level 10 |
 |  | `harbor_gate_opened` | Exit action requires `port_pass` | Level 9 complete |
-| 10 — Harbor | `courier_package_found` | Find the crew's stored package | — |
-|  | `container_route_opened` | Crane action requires `courier_package_found` | Container route opens |
-|  | `boat_key_found` | Package action requires `container_route_opened` and campaign item `port_pass`; rewards `boat_key` | Trigger global alarm and 60-second finale timer; checkpoint after key |
+| 10 — Harbor | `harbor_access_opened` | Gate action requires and consumes campaign item `port_pass` | — |
+|  | `courier_package_found` | Find the crew's stored package; requires `harbor_access_opened` | — |
+|  | `container_route_opened` | Crane action requires `courier_package_found` and the `courier_package` item | Container route opens |
+|  | `boat_key_found` | Package action requires and consumes `courier_package`; requires `container_route_opened`; rewards `boat_key` | Trigger global alarm and 60-second finale timer; checkpoint after key |
 |  | `boat_escape_started` | Boat action requires and consumes `boat_key` before timer expiry | Campaign complete |
 
 ## Campaign carry

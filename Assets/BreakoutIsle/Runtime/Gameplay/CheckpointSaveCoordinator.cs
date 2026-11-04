@@ -116,11 +116,61 @@ namespace BreakoutIsle.Gameplay
                 if (Application.isPlaying) GuardBrain.ResetAllToBaseline();
                 _pendingCheckpointId = null;
                 _saveQueued = false;
+                _chaseActive = false;
                 return SaveNow(checkpointId);
             }
             catch (Exception exception)
             {
                 return Fail("Could not initialize a new game: " + exception.Message);
+            }
+        }
+
+        public bool StartCampaignLevel(string checkpointId, CampaignCarryoverData carryover)
+        {
+            EnsureStore();
+            _restartGateChecked = false;
+            EnsureRestartGate();
+            if (_restartConfirmationRequired)
+                return Fail("A corrupt save requires explicit restart confirmation before transitioning levels.");
+            string carryError = null;
+            if (carryover == null || carryover.TryGetValidationError(out carryError))
+                return Fail("Campaign carryover is invalid: " + (carryError ?? "missing data."));
+            if (carryover.targetLevelId != levelId || session == null || session.Objectives == null ||
+                session.Objectives.levelId != levelId || !TryResolveAnchor(checkpointId, out var anchor) || PlayerAdapter == null)
+                return Fail("Destination level session, safe checkpoint, or player adapter is unavailable.");
+
+            var snapshot = SaveSnapshot.Create(levelId, checkpointId);
+            snapshot.outfitId = carryover.outfitId;
+            snapshot.selectedSupportSlot = carryover.selectedSupportSlot;
+            snapshot.supportItemIds = (string[])carryover.supportItemIds.Clone();
+            snapshot.questItemIds = new List<string>(carryover.questItemIds);
+            foreach (var flag in carryover.storyFlags)
+                snapshot.storyFlags.Add(new StoryFlagRecord { id = flag.id, value = flag.value });
+            if (!session.CanApplySnapshot(snapshot, out var sessionError))
+                return Fail("Campaign carryover cannot be applied in the destination: " + sessionError);
+
+            try
+            {
+                var entities = FindPersistedEntities();
+                WorldStateRegistry.RestoreBaseline(entities);
+                snapshot.worldEntities = WorldStateRegistry.Capture(entities);
+                if (!snapshot.IsValid || !session.CanApplySnapshot(snapshot, out sessionError))
+                    return Fail("Destination baseline cannot be saved: " + sessionError);
+                session.ResetForNewGame();
+                if (!session.TryApplySnapshot(snapshot, out sessionError))
+                    return Fail("Campaign carryover could not be restored: " + sessionError);
+                PlayerAdapter.RestoreAt(anchor.SpawnPosition);
+                if (Application.isPlaying) GuardBrain.ResetAllToBaseline();
+                _pendingCheckpointId = null;
+                _saveQueued = false;
+                _chaseActive = false;
+                _restartConfirmationRequired = false;
+                _restartGateChecked = true;
+                return SaveNow(checkpointId);
+            }
+            catch (Exception exception)
+            {
+                return Fail("Campaign transition initialization failed: " + exception.Message);
             }
         }
 

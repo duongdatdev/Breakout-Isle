@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level01_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: prison-01
+  steps:
+  - id: find-spoon
+    description: Find the hidden spoon
+    prerequisiteId: 
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: 
+    sequenceIndex: 0
+    requiredQuestItemId: 
+    consumeRequiredItem: 0
+    rewardQuestItemId: spoon
+  - id: open-vent
+    description: Pry open the vent
+    prerequisiteId: find-spoon
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: 
+    sequenceIndex: 0
+    requiredQuestItemId: spoon
+    consumeRequiredItem: 1
+    rewardQuestItemId: 
+  - id: find-keycard
+    description: Take the guard's keycard
+    prerequisiteId: open-vent
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: 
+    sequenceIndex: 0
+    requiredQuestItemId: 
+    consumeRequiredItem: 0
+    rewardQuestItemId: keycard
+  - id: escape
+    description: Use the keycard at the exit
+    prerequisiteId: find-keycard
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: 
+    sequenceIndex: 0
+    requiredQuestItemId: keycard
+    consumeRequiredItem: 1
+    rewardQuestItemId: 

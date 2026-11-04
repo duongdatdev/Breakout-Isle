@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level09_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: city-09
+  steps:
+  - id: market_cameras_disabled
+    description: "Disable the night market cameras"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: port_pass_found
+    description: "Find the harbor access pass"
+    prerequisiteId: "market_cameras_disabled"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "port_pass"
+  - id: harbor_gate_opened
+    description: "Use the harbor pass to exit the market"
+    prerequisiteId: "port_pass_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "port_pass"
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""

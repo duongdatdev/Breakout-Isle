@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level08_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: city-08
+  steps:
+  - id: valve_a_opened
+    description: "Turn the first valve"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: "sewer-valves"
+    sequenceIndex: 0
+    requiredQuestItemId: "cipher_note"
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: valve_b_opened
+    description: "Turn the second valve"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: "sewer-valves"
+    sequenceIndex: 1
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: valve_c_opened
+    description: "Turn the third valve"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: "sewer-valves"
+    sequenceIndex: 2
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: maintenance_chest_key_found
+    description: "Find the maintenance chest key"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: [valve_a_opened, valve_b_opened, valve_c_opened]
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "cipher_note"
+    consumeRequiredItem: 0
+    rewardQuestItemId: "sewer_chest_key"
+  - id: market_exit_key_found
+    description: "Open the chest and take the market exit key"
+    prerequisiteId: "maintenance_chest_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "sewer_chest_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: "market_exit_key"
+  - id: sewer_exit_opened
+    description: "Unlock the sewer exit"
+    prerequisiteId: "market_exit_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "market_exit_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: ""

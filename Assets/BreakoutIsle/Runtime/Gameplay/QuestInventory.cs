@@ -43,6 +43,19 @@ namespace BreakoutIsle.Gameplay
             return false;
         }
 
+        public bool TryRemoveSupportItemAt(int slot, out string itemId)
+        {
+            if (slot < 0 || slot >= _supportItems.Length || string.IsNullOrWhiteSpace(_supportItems[slot]))
+            {
+                itemId = null;
+                return false;
+            }
+
+            itemId = _supportItems[slot];
+            _supportItems[slot] = null;
+            return true;
+        }
+
         public string[] CopySupportItems() => (string[])_supportItems.Clone();
         public List<string> CopyQuestItems() => new List<string>(_questItems);
 

@@ -11,6 +11,7 @@ namespace BreakoutIsle.Tests
     public sealed class QuestSaveProgressTests
     {
         private readonly List<LevelObjectiveSet> _definitions = new List<LevelObjectiveSet>();
+        private readonly List<CampaignLevelDefinition> _campaignDefinitions = new List<CampaignLevelDefinition>();
         private readonly List<GameObject> _objects = new List<GameObject>();
         private readonly List<string> _tempDirectories = new List<string>();
 
@@ -23,6 +24,9 @@ namespace BreakoutIsle.Tests
             foreach (var definition in _definitions)
                 Object.DestroyImmediate(definition);
             _definitions.Clear();
+            foreach (var definition in _campaignDefinitions)
+                Object.DestroyImmediate(definition);
+            _campaignDefinitions.Clear();
             foreach (var directory in _tempDirectories)
                 if (Directory.Exists(directory)) Directory.Delete(directory, true);
             _tempDirectories.Clear();
@@ -318,6 +322,113 @@ namespace BreakoutIsle.Tests
             Assert.That(coordinator.TryGetContinueLevelId(out var levelId), Is.True);
             Assert.That(levelId, Is.EqualTo("level-7"));
             Assert.That(File.ReadAllText(path), Is.EqualTo("damaged-primary"));
+        }
+
+        [Test]
+        public void SupportPickupRefusesFullInventoryAndCollectsAfterASlotOpens()
+        {
+            var definition = CreateSet();
+            definition.levelId = "test-level";
+            var sessionObject = new GameObject("support-session-test");
+            sessionObject.SetActive(false);
+            _objects.Add(sessionObject);
+            var session = sessionObject.AddComponent<LevelSession>();
+            SetReference(session, "objectives", definition);
+            sessionObject.SetActive(true);
+            session.InitializeRuntimeState();
+            Assert.That(session.TryAddSupportItem("stone", out _), Is.True);
+            Assert.That(session.TryAddSupportItem("tin_can", out _), Is.True);
+            Assert.That(session.TryAddSupportItem("meat", out _), Is.True);
+
+            var playerObject = new GameObject("support-player-test");
+            playerObject.SetActive(false);
+            _objects.Add(playerObject);
+            var player = playerObject.AddComponent<PlayerInteractor>();
+            SetReference(player, "session", session);
+
+            var pickupObject = new GameObject("support-pickup-test");
+            pickupObject.SetActive(false);
+            _objects.Add(pickupObject);
+            var pickup = pickupObject.AddComponent<SupportItemPickup>();
+            SetString(pickup, "persistentId", "support-pickup-1");
+            SetString(pickup, "itemId", "glass_bottle");
+            pickupObject.SetActive(true);
+
+            pickup.Interact(player);
+            Assert.That(pickup.CaptureWorldState().state, Is.EqualTo("available"));
+            Assert.That(session.Inventory.SupportItems, Is.EqualTo(new[] { "stone", "tin_can", "meat" }));
+
+            Assert.That(session.Inventory.TryRemoveSupportItemAt(1, out var removed), Is.True);
+            Assert.That(removed, Is.EqualTo("tin_can"));
+            pickup.Interact(player);
+            Assert.That(pickup.CaptureWorldState().state, Is.EqualTo("collected"));
+            Assert.That(session.Inventory.SupportItems, Is.EqualTo(new[] { "stone", "glass_bottle", "meat" }));
+        }
+
+        [Test]
+        public void InventoryChangedFiresForSupportMutationRestoreAndReset()
+        {
+            var definition = CreateSet();
+            definition.levelId = "test-level";
+            var sessionObject = new GameObject("inventory-session-test");
+            sessionObject.SetActive(false);
+            _objects.Add(sessionObject);
+            var session = sessionObject.AddComponent<LevelSession>();
+            SetReference(session, "objectives", definition);
+            sessionObject.SetActive(true);
+            session.InitializeRuntimeState();
+            var changeCount = 0;
+            session.InventoryChanged += () => changeCount++;
+
+            Assert.That(session.TryAddSupportItem("stone", out _), Is.True);
+            Assert.That(session.SetSelectedSupportSlot(0), Is.True);
+            Assert.That(session.TryConsumeSelectedSupportItem(out var removed), Is.True);
+            Assert.That(removed, Is.EqualTo("stone"));
+            var snapshot = SaveSnapshot.Create("test-level", "checkpoint-test");
+            snapshot.supportItemIds = new[] { "can", "", "" };
+            Assert.That(session.TryApplySnapshot(snapshot, out var error), Is.True, error);
+            session.ResetForNewGame();
+
+            Assert.That(changeCount, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void MissingNextLevelDoesNotReportCampaignCompleteAndShowsFeedback()
+        {
+            var objectives = CreateSet();
+            objectives.levelId = "test-level";
+            var level = ScriptableObject.CreateInstance<CampaignLevelDefinition>();
+            _campaignDefinitions.Add(level);
+            level.levelId = "test-level";
+            level.sceneName = "TestScene";
+            level.initialCheckpointId = "checkpoint-test";
+
+            var sessionObject = new GameObject("campaign-session-test");
+            sessionObject.SetActive(false);
+            _objects.Add(sessionObject);
+            var session = sessionObject.AddComponent<LevelSession>();
+            SetReference(session, "objectives", objectives);
+            sessionObject.SetActive(true);
+            session.InitializeRuntimeState();
+
+            var serviceObject = new GameObject("campaign-transition-test");
+            serviceObject.SetActive(false);
+            _objects.Add(serviceObject);
+            var service = serviceObject.AddComponent<CampaignTransitionService>();
+            SetReference(service, "session", session);
+            SetReference(service, "currentLevel", level);
+            serviceObject.SetActive(true);
+            var failed = false;
+            var completed = false;
+            var shownMessage = false;
+            service.TransitionFailed += _ => failed = true;
+            service.CampaignCompleted += () => completed = true;
+            session.MessageShown += _ => shownMessage = true;
+
+            Assert.That(service.TryAdvance(), Is.False);
+            Assert.That(failed, Is.True);
+            Assert.That(completed, Is.False);
+            Assert.That(shownMessage, Is.True);
         }
 
         private LevelObjectiveSet CreateSet(params ObjectiveStepDefinition[] steps)

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level02_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: prison-02
+  steps:
+  - id: power_cut
+    description: "Cut power in the engineering room"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: laundry_chest_key_found
+    description: "Find the laundry chest key"
+    prerequisiteId: "power_cut"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "laundry_chest_key"
+  - id: yard_gate_key_found
+    description: "Open the chest and take the yard gate key"
+    prerequisiteId: "laundry_chest_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "laundry_chest_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: "yard_gate_key"
+  - id: yard_gate_opened
+    description: "Open the yard gate"
+    prerequisiteId: "yard_gate_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "yard_gate_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: ""

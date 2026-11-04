@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832e96b4477c5cb4e9dc17736a4af1a5, type: 3}
+  m_Name: Level04_Objectives
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.LevelObjectiveSet
+  levelId: forest-04
+  steps:
+  - id: map_piece_a_found
+    description: "Find map fragment A"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 1
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "map_fragment_a"
+  - id: map_piece_b_found
+    description: "Find map fragment B"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 1
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "map_fragment_b"
+  - id: map_piece_c_found
+    description: "Find map fragment C"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 1
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "map_fragment_c"
+  - id: burial_site_revealed
+    description: "Assemble the map and locate the buried chest"
+    prerequisiteId: ""
+    requiredCompletedObjectiveIds: [map_piece_a_found, map_piece_b_found, map_piece_c_found]
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: ""
+  - id: shovel_found
+    description: "Find the shovel at the ranger tent"
+    prerequisiteId: "burial_site_revealed"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "shovel"
+  - id: buried_chest_dug
+    description: "Dig up the buried chest"
+    prerequisiteId: "shovel_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "shovel"
+    consumeRequiredItem: 1
+    rewardQuestItemId: ""
+  - id: bridge_key_found
+    description: "Open the chest and take the bridge key"
+    prerequisiteId: "buried_chest_dug"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: ""
+    consumeRequiredItem: 0
+    rewardQuestItemId: "bridge_key"
+  - id: bridge_exit_opened
+    description: "Unlock the bridge exit"
+    prerequisiteId: "bridge_key_found"
+    requiredCompletedObjectiveIds: []
+    canCompleteOutOfOrder: 0
+    sequenceGroupId: ""
+    sequenceIndex: 0
+    requiredQuestItemId: "bridge_key"
+    consumeRequiredItem: 1
+    rewardQuestItemId: ""
