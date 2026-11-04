@@ -12,6 +12,7 @@ namespace BreakoutIsle.Gameplay
         private bool _exhausted;
 
         public float Current { get; private set; }
+        public bool CanSprint => !_exhausted && Current > 0f;
 
         public void RestoreFull()
         {

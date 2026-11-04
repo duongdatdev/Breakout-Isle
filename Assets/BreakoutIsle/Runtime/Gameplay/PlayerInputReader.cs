@@ -22,10 +22,12 @@ namespace BreakoutIsle.Gameplay
         private Action<InputAction.CallbackContext>[] _slotCallbacks;
         private bool _throwStartedOverUi;
         private bool _gameplayBlocked;
+        private bool _ignoreGameplayUntilNeutral;
 
-        public Vector2 Move => _gameplayBlocked || _move == null ? Vector2.zero : _move.ReadValue<Vector2>();
-        public bool SprintHeld => !_gameplayBlocked && _sprint != null && _sprint.IsPressed();
-        public bool SneakHeld => !_gameplayBlocked && _sneak != null && _sneak.IsPressed();
+        private bool GameplayInputBlocked => _gameplayBlocked || _ignoreGameplayUntilNeutral;
+        public Vector2 Move => GameplayInputBlocked || _move == null ? Vector2.zero : _move.ReadValue<Vector2>();
+        public bool SprintHeld => !GameplayInputBlocked && _sprint != null && _sprint.IsPressed();
+        public bool SneakHeld => !GameplayInputBlocked && _sneak != null && _sneak.IsPressed();
 
         public event Action InteractPressed;
         public event Action ThrowPressed;
@@ -61,7 +63,7 @@ namespace BreakoutIsle.Gameplay
             for (var i = 0; i < _slotCallbacks.Length; i++)
             {
                 var selectedSlot = i + 1;
-                _slotCallbacks[i] = _ => { if (!_gameplayBlocked) SlotSelected?.Invoke(selectedSlot); };
+                _slotCallbacks[i] = _ => { if (!GameplayInputBlocked) SlotSelected?.Invoke(selectedSlot); };
             }
         }
 
@@ -80,6 +82,12 @@ namespace BreakoutIsle.Gameplay
             _map.Enable();
         }
 
+        private void Update()
+        {
+            if (_ignoreGameplayUntilNeutral && GameplayControlsAreReleased())
+                _ignoreGameplayUntilNeutral = false;
+        }
+
         private void OnDisable()
         {
             if (_map == null)
@@ -96,23 +104,39 @@ namespace BreakoutIsle.Gameplay
         }
 
         public void SetGameplayBlocked(bool blocked) => _gameplayBlocked = blocked;
+        public void ResetGameplayInputUntilNeutral()
+        {
+            _ignoreGameplayUntilNeutral = true;
+            _throwStartedOverUi = true;
+        }
 
-        private void OnInteract(InputAction.CallbackContext _) { if (!_gameplayBlocked) InteractPressed?.Invoke(); }
+        private void OnInteract(InputAction.CallbackContext _) { if (!GameplayInputBlocked) InteractPressed?.Invoke(); }
         private void OnPause(InputAction.CallbackContext _) => PausePressed?.Invoke();
         private void OnObjectives(InputAction.CallbackContext _) => ObjectivesPressed?.Invoke();
 
         private void OnThrowStarted(InputAction.CallbackContext _)
         {
-            _throwStartedOverUi = _gameplayBlocked || (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject());
+            _throwStartedOverUi = GameplayInputBlocked || (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject());
             if (!_throwStartedOverUi)
                 ThrowPressed?.Invoke();
         }
 
         private void OnThrowCanceled(InputAction.CallbackContext _)
         {
-            if (!_throwStartedOverUi)
+            if (!_throwStartedOverUi && !GameplayInputBlocked)
                 ThrowReleased?.Invoke();
             _throwStartedOverUi = false;
+        }
+
+        private bool GameplayControlsAreReleased()
+        {
+            if (_move == null || _sprint == null || _sneak == null || _interact == null || _throw == null || _slots == null)
+                return true;
+            if (_move.ReadValue<Vector2>().sqrMagnitude > 0.001f || _sprint.IsPressed() || _sneak.IsPressed() ||
+                _interact.IsPressed() || _throw.IsPressed()) return false;
+            foreach (var slot in _slots)
+                if (slot.IsPressed()) return false;
+            return true;
         }
     }
 }
