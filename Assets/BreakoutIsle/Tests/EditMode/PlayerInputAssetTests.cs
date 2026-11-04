@@ -131,7 +131,7 @@ namespace BreakoutIsle.Tests
         }
 
         [Test]
-        public void RookAnimatorUsesAllFourEightDirectionActionSets()
+        public void RookAnimatorUsesEightDirectionLocomotionAndActionClips()
         {
             const string controllerPath = "Assets/BreakoutIsle/Animations/RookPrison/RookPrison.controller";
             const string clipsPath = "Assets/BreakoutIsle/Animations/RookPrison/Clips";
@@ -147,7 +147,22 @@ namespace BreakoutIsle.Tests
             Assert.That(directionTrees.All(tree => tree.children.Length == 8), Is.True);
 
             var clipGuids = AssetDatabase.FindAssets("t:AnimationClip", new[] { clipsPath });
-            Assert.That(clipGuids, Has.Length.EqualTo(32));
+            var directions = new[] { "S", "SW", "W", "NW", "N", "NE", "E", "SE" };
+            var actionNames = new[] { "idle", "walk", "run", "sneak", "interact", "pry", "crawl", "hide-enter", "hide-exit", "caught", "climb", "throw" };
+            var expectedClipNames = actionNames.SelectMany(action => directions.Select(direction => action + "_" + direction)).ToArray();
+            var clipNames = clipGuids
+                .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
+                .Select(path => path.Substring(path.LastIndexOf('/') + 1).Replace(".anim", string.Empty))
+                .ToArray();
+            CollectionAssert.AreEquivalent(expectedClipNames, clipNames);
+
+            var stateNames = controller.layers[0].stateMachine.states.Select(state => state.state.name).ToArray();
+            var expectedActionStates = actionNames.Skip(4)
+                .SelectMany(action => directions.Select(direction => PlayerActionAnimator.StateName(action, direction)))
+                .ToArray();
+            foreach (var expectedState in expectedActionStates)
+                CollectionAssert.Contains(stateNames, expectedState);
+
             var playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/BreakoutIsle/Prefabs/Characters/RookPlayer.prefab");
             Assert.That(playerPrefab, Is.Not.Null);
             Assert.That(playerPrefab.GetComponent<SpriteRenderer>().sprite, Is.Not.Null);
@@ -155,6 +170,7 @@ namespace BreakoutIsle.Tests
             Assert.That(playerPrefab.GetComponent<Rigidbody2D>(), Is.Not.Null);
             Assert.That(playerPrefab.GetComponent<PlayerMotor>(), Is.Not.Null);
             Assert.That(playerPrefab.GetComponent<PlayerInputReader>(), Is.Not.Null);
+            Assert.That(playerPrefab.GetComponent<PlayerActionAnimator>(), Is.Not.Null);
             Assert.That(playerPrefab.GetComponent<YSortRenderer>(), Is.Not.Null);
         }
 

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2831349720417306099}
   - component: {fileID: 5257978568775831438}
   - component: {fileID: 1878765288061891091}
+  - component: {fileID: 256159642150819448}
   m_Layer: 6
   m_Name: RookPlayer
   m_TagString: Untagged
@@ -224,3 +225,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee7acb5d83dfde46b6687f16625304d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.PlayerMotor
+--- !u!114 &256159642150819448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5599815634445669068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01902113d8c078344acd64ef4d2e73a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.PlayerActionAnimator
+  animator: {fileID: 4195497010741138862}
+  motor: {fileID: 1878765288061891091}
+  input: {fileID: 5257978568775831438}
+  interactor: {fileID: 0}
+  session: {fileID: 0}
+  stealth: {fileID: 0}
+  supportItems: {fileID: 0}
+  spriteRenderer: {fileID: 147708909623763079}
+  actions:
+  - action: interact
+    frameCount: 4
+    fps: 10
+    loop: 0
+  - action: pry
+    frameCount: 6
+    fps: 10
+    loop: 0
+  - action: crawl
+    frameCount: 6
+    fps: 10
+    loop: 1
+  - action: hide-enter
+    frameCount: 4
+    fps: 10
+    loop: 0
+  - action: hide-exit
+    frameCount: 4
+    fps: 10
+    loop: 0
+  - action: caught
+    frameCount: 6
+    fps: 10
+    loop: 0
+  - action: climb
+    frameCount: 6
+    fps: 10
+    loop: 1
+  - action: throw
+    frameCount: 6
+    fps: 10
+    loop: 0

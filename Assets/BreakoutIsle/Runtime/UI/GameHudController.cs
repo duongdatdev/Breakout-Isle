@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text;
 using BreakoutIsle.Audio;
 using BreakoutIsle.Gameplay;
@@ -14,6 +15,7 @@ namespace BreakoutIsle.UI
         [SerializeField] private PlayerMotor motor;
         [SerializeField] private PlayerInteractor interactor;
         [SerializeField] private PlayerStealthState stealth;
+        [SerializeField] private PlayerActionAnimator actionAnimator;
         [SerializeField] private LevelSession session;
         [SerializeField] private CheckpointSaveCoordinator checkpointCoordinator;
         [SerializeField] private Text objectivesText;
@@ -44,6 +46,7 @@ namespace BreakoutIsle.UI
 
         private bool _overlayOpen;
         private float _statusRemaining;
+        private Coroutine _capturedPresentationWait;
 
         public void Bind(PlayerInputReader playerInput, PlayerMotor playerMotor, PlayerInteractor playerInteractor,
             PlayerStealthState playerStealth, LevelSession levelSession, CheckpointSaveCoordinator checkpoints)
@@ -52,6 +55,7 @@ namespace BreakoutIsle.UI
             motor = playerMotor;
             interactor = playerInteractor;
             stealth = playerStealth;
+            actionAnimator = playerInput != null ? playerInput.GetComponent<PlayerActionAnimator>() : null;
             session = levelSession;
             checkpointCoordinator = checkpoints;
             _retryAction = checkpoints != null ? new System.Func<bool>(checkpoints.RetryFromCheckpoint) : null;
@@ -118,9 +122,11 @@ namespace BreakoutIsle.UI
                 session.ObjectiveCompleted += OnObjectiveChanged;
                 session.ObjectiveReset += OnObjectiveChanged;
                 session.QuestCompleted += OnQuestCompleted;
+                session.InventoryChanged += OnInventoryChanged;
                 session.MessageShown += ShowStatus;
             }
             if (stealth != null) stealth.Captured += OnCaptured;
+            if (actionAnimator != null) actionAnimator.ActionCompleted += OnPlayerActionCompleted;
             if (checkpointCoordinator != null)
             {
                 checkpointCoordinator.SavePendingChanged += OnSavePending;
@@ -173,9 +179,11 @@ namespace BreakoutIsle.UI
                 session.ObjectiveCompleted -= OnObjectiveChanged;
                 session.ObjectiveReset -= OnObjectiveChanged;
                 session.QuestCompleted -= OnQuestCompleted;
+                session.InventoryChanged -= OnInventoryChanged;
                 session.MessageShown -= ShowStatus;
             }
             if (stealth != null) stealth.Captured -= OnCaptured;
+            if (actionAnimator != null) actionAnimator.ActionCompleted -= OnPlayerActionCompleted;
             if (checkpointCoordinator != null)
             {
                 checkpointCoordinator.SavePendingChanged -= OnSavePending;
@@ -199,6 +207,11 @@ namespace BreakoutIsle.UI
             }
             if (capturedMenuButton != null) capturedMenuButton.onClick.RemoveListener(ReturnToMenu);
             if (victoryMenuButton != null) victoryMenuButton.onClick.RemoveListener(ReturnToMenu);
+            if (_capturedPresentationWait != null)
+            {
+                StopCoroutine(_capturedPresentationWait);
+                _capturedPresentationWait = null;
+            }
             Time.timeScale = 1f;
         }
 
@@ -283,10 +296,35 @@ namespace BreakoutIsle.UI
 
         private void OnCaptured()
         {
-            Time.timeScale = 0f;
             SetGameplayBlocked(true);
             SetActive(pausePanel, false);
             SetActive(objectivesPanel, false);
+            if (_capturedPresentationWait != null) StopCoroutine(_capturedPresentationWait);
+            _capturedPresentationWait = StartCoroutine(ShowCapturedAfterCaughtAction());
+        }
+
+        private IEnumerator ShowCapturedAfterCaughtAction()
+        {
+            // Let all Captured event listeners start the caught clip before deciding
+            // whether to freeze gameplay. This also works if listener order changes.
+            yield return null;
+            while (actionAnimator != null && actionAnimator.CurrentAction == "caught" && actionAnimator.IsPlayingAction)
+                yield return null;
+            _capturedPresentationWait = null;
+            PresentCaptured();
+        }
+
+        private void OnPlayerActionCompleted(string action)
+        {
+            if (action != "caught" || _capturedPresentationWait == null) return;
+            StopCoroutine(_capturedPresentationWait);
+            _capturedPresentationWait = null;
+            PresentCaptured();
+        }
+
+        private void PresentCaptured()
+        {
+            Time.timeScale = 0f;
             SetActive(capturedPanel, true);
             ShowStatus("Bạn đã bị phát hiện. Hãy thử lại từ điểm lưu gần nhất.");
             if (AudioService.Instance != null) AudioService.Instance.Play("alert.guard");
@@ -294,6 +332,13 @@ namespace BreakoutIsle.UI
         }
 
         private void OnQuestCompleted()
+        {
+            RefreshObjectives();
+            RefreshInventory();
+            ShowStatus("Mục tiêu đã hoàn tất. Hãy tiến tới lối thoát.");
+        }
+
+        public void ShowCampaignVictory()
         {
             Time.timeScale = 0f;
             SetGameplayBlocked(true);
@@ -309,6 +354,7 @@ namespace BreakoutIsle.UI
             RefreshObjectives();
             RefreshInventory();
         }
+        private void OnInventoryChanged() => RefreshInventory();
         private void OnPromptChanged(string value) { }
 
         private void RefreshObjectives()
@@ -405,7 +451,6 @@ namespace BreakoutIsle.UI
         {
             if (session == null) return;
             session.SetSelectedSupportSlot(value - 1);
-            RefreshInventory();
         }
 
         private void ShowStatus(string message)
@@ -443,6 +488,12 @@ namespace BreakoutIsle.UI
 
         private void OnCheckpointRestored(string checkpoint)
         {
+            if (_capturedPresentationWait != null)
+            {
+                StopCoroutine(_capturedPresentationWait);
+                _capturedPresentationWait = null;
+            }
+            if (actionAnimator != null) actionAnimator.StopAction();
             CompleteCheckpointRestore();
         }
 
@@ -475,7 +526,6 @@ namespace BreakoutIsle.UI
         public void SelectSupportSlotFromUi(int slot)
         {
             if (session == null || !session.SetSelectedSupportSlot(slot)) return;
-            RefreshInventory();
         }
 
         private void ConfirmRestart()

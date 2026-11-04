@@ -1,8 +1,8 @@
+using System;
 using BreakoutIsle.Audio;
 using BreakoutIsle.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace BreakoutIsle.UI
@@ -22,6 +22,17 @@ namespace BreakoutIsle.UI
         [SerializeField] private CheckpointSaveCoordinator checkpointCoordinator;
         [SerializeField] private string levelSceneName = "Level01_Prison";
         [SerializeField] private string initialCheckpointId = "cell-start";
+        [SerializeField] private LevelSceneRoute[] levelRoutes =
+        {
+            new LevelSceneRoute { levelId = "prison-01", sceneName = "Level01_Prison" }
+        };
+
+        [Serializable]
+        private struct LevelSceneRoute
+        {
+            public string levelId;
+            public string sceneName;
+        }
 
         private void OnEnable()
         {
@@ -102,15 +113,34 @@ namespace BreakoutIsle.UI
                 Play("ui.error");
                 return;
             }
+            if (!checkpointCoordinator.TryGetContinueLevelId(out var levelId) || !TryResolveScene(levelId, out var savedScene))
+            {
+                if (saveStatusText != null) saveStatusText.text = "Bản lưu thuộc khu vực chưa được cài đặt.";
+                Play("ui.error");
+                return;
+            }
             Play("ui.confirm");
-            LoadLevel(true, false);
+            LoadLevel(true, false, savedScene);
         }
 
-        private void LoadLevel(bool continueGame, bool confirmedRestart)
+        private bool TryResolveScene(string levelId, out string sceneName)
+        {
+            if (levelRoutes != null)
+                foreach (var route in levelRoutes)
+                    if (string.Equals(route.levelId, levelId, StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(route.sceneName))
+                    {
+                        sceneName = route.sceneName;
+                        return true;
+                    }
+            sceneName = null;
+            return false;
+        }
+
+        private void LoadLevel(bool continueGame, bool confirmedRestart, string scene = null)
         {
             var transition = new GameObject("Breakout Scene Launch").AddComponent<SceneLaunchRequest>();
-            transition.Configure(continueGame, confirmedRestart, levelSceneName, initialCheckpointId);
             DontDestroyOnLoad(transition.gameObject);
+            transition.Configure(continueGame, confirmedRestart, string.IsNullOrWhiteSpace(scene) ? levelSceneName : scene, initialCheckpointId);
         }
 
         private void ShowSettings() { Play("ui.panel.open"); if (settingsPanel != null) settingsPanel.SetActive(true); }
@@ -131,41 +161,5 @@ namespace BreakoutIsle.UI
             if (saveStatusText != null) saveStatusText.text = "Tiến trình lỗi vẫn được giữ nguyên.";
         }
         private static void Play(string eventId) { if (AudioService.Instance != null) AudioService.Instance.Play(eventId); }
-    }
-
-    public sealed class SceneLaunchRequest : MonoBehaviour
-    {
-        private bool _continue;
-        private bool _confirmedRestart;
-        private string _scene;
-        private string _checkpoint;
-        private bool _loading;
-
-        public void Configure(bool continueGame, bool confirmedRestart, string scene, string checkpoint)
-        {
-            _continue = continueGame;
-            _confirmedRestart = confirmedRestart;
-            _scene = scene;
-            _checkpoint = checkpoint;
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene(_scene);
-            _loading = true;
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (!_loading || scene.name != _scene) return;
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            var coordinator = FindObjectOfType<CheckpointSaveCoordinator>();
-            if (coordinator != null)
-            {
-                if (_continue) coordinator.LoadContinue();
-                else if (_confirmedRestart) coordinator.ConfirmRestartAndStartNewGame(_checkpoint);
-                else coordinator.StartNewGame(_checkpoint);
-            }
-            Destroy(gameObject);
-        }
-
-        private void OnDestroy() { SceneManager.sceneLoaded -= OnSceneLoaded; }
     }
 }

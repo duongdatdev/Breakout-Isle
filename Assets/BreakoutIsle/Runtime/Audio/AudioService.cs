@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BreakoutIsle.Audio
@@ -22,6 +23,7 @@ namespace BreakoutIsle.Audio
         private int _lastClipIndex = -1;
         private float _musicGainA;
         private float _musicGainB;
+        private readonly List<AudioSource> _spatialOneShots = new List<AudioSource>();
 
         public float MasterVolume => _masterVolume;
         public bool Muted => _muted;
@@ -60,7 +62,12 @@ namespace BreakoutIsle.Audio
         public bool PlayAt(string eventId, Vector3 position, float volume = 1f)
         {
             if (catalog == null || !catalog.TryGet(eventId, out var clips) || clips.Length == 0) return false;
-            AudioSource.PlayClipAtPoint(Select(clips), position, Mathf.Clamp01(volume) * EffectiveVolume);
+            var clip = Select(clips);
+            if (clip == null) return false;
+            var source = FindAvailableSpatialSource();
+            source.transform.position = position;
+            source.volume = EffectiveVolume;
+            source.PlayOneShot(clip, Mathf.Clamp01(volume));
             return true;
         }
 
@@ -193,8 +200,26 @@ namespace BreakoutIsle.Audio
             AudioListener.volume = 1f;
             if (oneShotSource != null) oneShotSource.volume = EffectiveVolume;
             if (ambienceSource != null) ambienceSource.volume = EffectiveVolume;
+            foreach (var source in _spatialOneShots)
+                if (source != null) source.volume = EffectiveVolume;
             if (musicA != null) musicA.volume = _musicGainA * EffectiveVolume;
             if (musicB != null) musicB.volume = _musicGainB * EffectiveVolume;
+        }
+
+        private AudioSource FindAvailableSpatialSource()
+        {
+            foreach (var source in _spatialOneShots)
+                if (source != null && !source.isPlaying) return source;
+
+            var sourceObject = new GameObject("Spatial One Shot " + _spatialOneShots.Count);
+            sourceObject.transform.SetParent(transform, false);
+            var created = sourceObject.AddComponent<AudioSource>();
+            created.playOnAwake = false;
+            created.loop = false;
+            created.spatialBlend = 1f;
+            created.volume = EffectiveVolume;
+            _spatialOneShots.Add(created);
+            return created;
         }
 
         private float GetMusicGain(AudioSource source)

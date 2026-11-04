@@ -27,11 +27,13 @@ namespace BreakoutIsle.Editor
             public bool loop;
         }
 
-        [MenuItem("Breakout Isle/Characters/Build Rook Locomotion and Prefab")]
+        [MenuItem("Breakout Isle/Characters/Build Rook Animations and Prefab")]
         public static void Build()
         {
-            var actionNames = new[] { "idle", "walk", "run", "sneak" };
+            var locomotionActionNames = new[] { "idle", "walk", "run", "sneak" };
+            var actionNames = new[] { "interact", "pry", "crawl", "hide-enter", "hide-exit", "caught", "climb", "throw" };
             var clipsByAction = new Dictionary<string, Dictionary<string, AnimationClip>>();
+            var actionDefinitions = new List<PlayerActionAnimator.ActionDefinition>();
             var clipsFolder = OutputPath + "/Clips";
             EnsureFolder("Assets/BreakoutIsle/Animations");
             EnsureFolder(OutputPath);
@@ -39,26 +41,47 @@ namespace BreakoutIsle.Editor
                 AssetDatabase.DeleteAsset(clipsFolder);
             EnsureFolder(clipsFolder);
 
+            foreach (var actionName in locomotionActionNames)
+            {
+                var manifest = ReadManifest(actionName);
+                clipsByAction.Add(actionName, BuildAction(actionName, clipsFolder, manifest));
+            }
             foreach (var actionName in actionNames)
-                clipsByAction.Add(actionName, BuildAction(actionName, clipsFolder));
+            {
+                var manifest = ReadManifest(actionName);
+                clipsByAction.Add(actionName, BuildAction(actionName, clipsFolder, manifest));
+                actionDefinitions.Add(new PlayerActionAnimator.ActionDefinition
+                {
+                    action = actionName,
+                    frameCount = manifest.frameCount,
+                    fps = manifest.fps,
+                    loop = manifest.loop
+                });
+            }
 
             var controllerPath = OutputPath + "/RookPrison.controller";
             if (AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath) != null)
                 AssetDatabase.DeleteAsset(controllerPath);
-            var controller = BuildController(controllerPath, clipsByAction);
-            BuildPlayerPrefab(controller, LoadIdleSouthSprite());
+            var controller = BuildController(controllerPath, clipsByAction, actionNames);
+            BuildPlayerPrefab(controller, LoadIdleSouthSprite(), actionDefinitions.ToArray());
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"Built Rook's four locomotion blend trees and player prefab at {PrefabPath}.");
+            Debug.Log($"Built Rook's four locomotion blend trees, eight directional action sets, and player prefab at {PrefabPath}.");
         }
 
-        private static Dictionary<string, AnimationClip> BuildAction(string actionName, string clipsFolder)
+        private static ActionManifest ReadManifest(string actionName)
         {
             var actionFolder = CharacterArtPath + "/" + actionName;
             var manifestPath = actionFolder + "/unity-import-settings.json";
             var manifest = JsonUtility.FromJson<ActionManifest>(File.ReadAllText(manifestPath));
             if (manifest == null || manifest.action != actionName || manifest.directionOrder == null || manifest.frameCount < 1 || manifest.fps < 1)
                 throw new InvalidDataException($"Invalid animation manifest: {manifestPath}");
+            return manifest;
+        }
+
+        private static Dictionary<string, AnimationClip> BuildAction(string actionName, string clipsFolder, ActionManifest manifest)
+        {
+            var actionFolder = CharacterArtPath + "/" + actionName;
 
             var sheetPath = actionFolder + "/" + manifest.sheet;
             var sprites = AssetDatabase.LoadAllAssetsAtPath(sheetPath);
@@ -110,7 +133,7 @@ namespace BreakoutIsle.Editor
             return clips;
         }
 
-        private static AnimatorController BuildController(string controllerPath, Dictionary<string, Dictionary<string, AnimationClip>> clipsByAction)
+        private static AnimatorController BuildController(string controllerPath, Dictionary<string, Dictionary<string, AnimationClip>> clipsByAction, string[] actionNames)
         {
             var controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
             controller.AddParameter("MoveMode", AnimatorControllerParameterType.Float);
@@ -135,6 +158,14 @@ namespace BreakoutIsle.Editor
             var state = stateMachine.AddState("Rook Locomotion");
             state.motion = locomotion;
             stateMachine.defaultState = state;
+            foreach (var actionName in actionNames)
+            {
+                foreach (var pair in clipsByAction[actionName])
+                {
+                    var actionState = stateMachine.AddState(PlayerActionAnimator.StateName(actionName, pair.Key));
+                    actionState.motion = pair.Value;
+                }
+            }
             EditorUtility.SetDirty(controller);
             return controller;
         }
@@ -184,7 +215,7 @@ namespace BreakoutIsle.Editor
             }
         }
 
-        private static void BuildPlayerPrefab(AnimatorController controller, Sprite idleSouth)
+        private static void BuildPlayerPrefab(AnimatorController controller, Sprite idleSouth, PlayerActionAnimator.ActionDefinition[] actionDefinitions)
         {
             var inputActions = AssetDatabase.LoadAssetAtPath<InputActionAsset>(InputPath);
             if (inputActions == null)
@@ -193,6 +224,7 @@ namespace BreakoutIsle.Editor
             EnsureFolder("Assets/BreakoutIsle/Prefabs");
             EnsureFolder("Assets/BreakoutIsle/Prefabs/Characters");
             var player = new GameObject("Rook");
+            player.SetActive(false);
             player.layer = LayerMask.NameToLayer("Player");
 
             var renderer = player.AddComponent<SpriteRenderer>();
@@ -219,8 +251,12 @@ namespace BreakoutIsle.Editor
             var serializedInput = new SerializedObject(inputReader);
             serializedInput.FindProperty("inputActions").objectReferenceValue = inputActions;
             serializedInput.ApplyModifiedPropertiesWithoutUndo();
-            player.AddComponent<PlayerMotor>();
+            var motor = player.AddComponent<PlayerMotor>();
+            var actionAnimator = player.AddComponent<PlayerActionAnimator>();
+            actionAnimator.Configure(animator, motor, inputReader, actionDefinitions);
+            EditorUtility.SetDirty(actionAnimator);
 
+            player.SetActive(true);
             PrefabUtility.SaveAsPrefabAsset(player, PrefabPath);
             UnityEngine.Object.DestroyImmediate(player);
         }

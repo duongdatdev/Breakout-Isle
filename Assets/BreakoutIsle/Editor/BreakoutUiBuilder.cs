@@ -190,6 +190,8 @@ namespace BreakoutIsle.Editor
                 pause.buttons[2], slotImages, slotTexts, icons, selectedSprite, buttonSprite, settingsController,
                 restart.root, restart.buttons[0], restart.buttons[1], mapClose,
                 captured.buttons[1], victory.buttons[0]);
+            controller.Bind(player.GetComponent<PlayerInputReader>(), player.GetComponent<PlayerMotor>(),
+                player.GetComponent<PlayerInteractor>(), player.GetComponent<PlayerStealthState>(), session, checkpointCoordinator);
             EditorUtility.SetDirty(controller);
             var statusButton = CreateText(canvasRoot.transform, "Map Hint", "WASD di chuyển   ·   E tương tác   ·   TAB nhiệm vụ   ·   ESC tạm dừng", 10,
                 new Vector2(1, 0), new Vector2(-12, 11), new Vector2(350, 18));
@@ -291,6 +293,7 @@ namespace BreakoutIsle.Editor
             AddMapRegion(content, "Guard office", new Rect(23, 10, 11, 7), new Color(0.48f, 0.58f, 0.63f), "");
             AddMapRegion(content, "Exit wing", new Rect(33, 12, 5, 2), new Color(0.84f, 0.68f, 0.37f), "");
             AddDiscoveredHidingPoints(content, player, 4f);
+            AddExitMarker(content, false);
             return content;
         }
 
@@ -304,7 +307,28 @@ namespace BreakoutIsle.Editor
             AddMapRegion(content, "Guard office", new Rect(23, 10, 11, 7), new Color(0.48f, 0.58f, 0.63f), "VĂN PHÒNG");
             AddMapRegion(content, "Exit wing", new Rect(33, 12, 5, 2), new Color(0.84f, 0.68f, 0.37f), "CỬA RA");
             AddDiscoveredHidingPoints(content, player, 6f);
+            AddExitMarker(content, true);
             return content;
+        }
+
+        private static void AddExitMarker(RectTransform parent, bool includeLabel)
+        {
+            var gate = UnityEngine.Object.FindObjectOfType<GateInteractable>(true);
+            var exitObject = gate != null ? gate.gameObject : GameObject.Find("Prison Exit");
+            if (exitObject == null) return;
+
+            var worldPosition = (Vector2)exitObject.transform.position;
+            var normalized = new Vector2(
+                (worldPosition.x - Level01MapBounds.xMin) / Level01MapBounds.width,
+                (worldPosition.y - Level01MapBounds.yMin) / Level01MapBounds.height);
+            var marker = CreateMapMarker(parent, "Exit marker", new Color(1f, 0.48f, 0.27f));
+            marker.anchorMin = marker.anchorMax = normalized;
+            marker.sizeDelta = new Vector2(parent.sizeDelta.x < 130f ? 8f : 10f, parent.sizeDelta.x < 130f ? 8f : 10f);
+            if (!includeLabel) return;
+
+            var label = CreateText(marker, "Exit label", "RA", 8, new Vector2(0, 0.5f), new Vector2(7, 0), new Vector2(23, 12));
+            label.alignment = TextAnchor.MiddleLeft;
+            label.color = new Color(1f, 0.82f, 0.55f);
         }
 
         private static RectTransform CreateMapContent(Transform parent, string name, Vector2 position, Vector2 size)

@@ -53,6 +53,24 @@ namespace BreakoutIsle.Tests
         }
 
         [Test]
+        public void ContinueSceneRouteResolvesTheSavedPrisonLevel()
+        {
+            var menuObject = new GameObject("Main Menu Route Test");
+            var menu = menuObject.AddComponent<MainMenuController>();
+            var route = new object[] { "prison-01", null };
+            var resolve = typeof(MainMenuController).GetMethod("TryResolveScene", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(resolve, Is.Not.Null);
+
+            Assert.That(resolve.Invoke(menu, route), Is.True);
+            Assert.That(route[1], Is.EqualTo("Level01_Prison"));
+            var missing = new object[] { "future-level", null };
+            Assert.That(resolve.Invoke(menu, missing), Is.False);
+            Assert.That(missing[1], Is.Null);
+
+            Object.DestroyImmediate(menuObject);
+        }
+
+        [Test]
         public void MasterAndMuteAffectOneShotsAndMusicWithoutBlockingPlaybackRequests()
         {
             var clip = AudioClip.Create("audio_mix_test", 256, 1, 44100, false);
@@ -66,6 +84,8 @@ namespace BreakoutIsle.Tests
             var service = serviceObject.AddComponent<AudioService>();
             service.Configure(catalog);
             InvokePrivate(service, "EnsureSources");
+            var previousVolume = PlayerPrefs.GetFloat("breakout.audio.master", 1f);
+            var previousMute = PlayerPrefs.GetInt("breakout.audio.muted", 0);
             service.SetMuted(false);
             service.SetMasterVolume(0.6f);
 
@@ -74,19 +94,26 @@ namespace BreakoutIsle.Tests
                 Assert.That(service.Play("sfx.test"), Is.True);
                 var oneShot = ReadAudioSource(service, "oneShotSource");
                 Assert.That(oneShot.volume, Is.EqualTo(0.6f).Within(0.001f));
+                Assert.That(service.PlayAt("sfx.test", Vector3.zero), Is.True);
+                var spatialOneShot = System.Array.Find(serviceObject.GetComponentsInChildren<AudioSource>(), source => source.spatialBlend > 0.5f);
+                Assert.That(spatialOneShot, Is.Not.Null);
+                Assert.That(spatialOneShot.volume, Is.EqualTo(0.6f).Within(0.001f));
                 Assert.That(service.PlayLoop("music.test", false), Is.True);
                 var music = ReadAudioSource(service, "musicA");
                 Assert.That(music.volume, Is.EqualTo(0.6f).Within(0.001f));
 
                 service.SetMasterVolume(0.25f);
                 Assert.That(oneShot.volume, Is.EqualTo(0.25f).Within(0.001f));
+                Assert.That(spatialOneShot.volume, Is.EqualTo(0.25f).Within(0.001f));
                 Assert.That(music.volume, Is.EqualTo(0.25f).Within(0.001f));
                 service.SetMuted(true);
                 Assert.That(service.Play("sfx.test"), Is.True, "Mute should silence output without suppressing event logic.");
                 Assert.That(oneShot.volume, Is.Zero);
+                Assert.That(spatialOneShot.volume, Is.Zero);
                 Assert.That(music.volume, Is.Zero);
                 service.SetMuted(false);
                 Assert.That(oneShot.volume, Is.EqualTo(0.25f).Within(0.001f));
+                Assert.That(spatialOneShot.volume, Is.EqualTo(0.25f).Within(0.001f));
                 Assert.That(music.volume, Is.EqualTo(0.25f).Within(0.001f));
             }
             finally
@@ -94,6 +121,9 @@ namespace BreakoutIsle.Tests
                 Object.DestroyImmediate(serviceObject);
                 Object.DestroyImmediate(catalog);
                 Object.DestroyImmediate(clip);
+                PlayerPrefs.SetFloat("breakout.audio.master", previousVolume);
+                PlayerPrefs.SetInt("breakout.audio.muted", previousMute);
+                PlayerPrefs.Save();
             }
         }
 
@@ -109,6 +139,25 @@ namespace BreakoutIsle.Tests
                 Assert.That(ReadGameplayBlocked(fixture.input), Is.False);
                 Assert.That(fixture.pause.activeSelf, Is.False);
                 Assert.That(Time.timeScale, Is.EqualTo(1f));
+            }
+            finally { DestroyFixture(fixture); }
+        }
+
+        [Test]
+        public void GenericQuestCompletionDoesNotFreezeBeforeExplicitCampaignVictory()
+        {
+            var fixture = CreateHudFixture();
+            try
+            {
+                InvokePrivate(fixture.hud, "OnQuestCompleted");
+                Assert.That(Time.timeScale, Is.EqualTo(1f));
+                Assert.That(fixture.victory.activeSelf, Is.False);
+                Assert.That(ReadGameplayBlocked(fixture.input), Is.False);
+
+                fixture.hud.ShowCampaignVictory();
+                Assert.That(Time.timeScale, Is.Zero);
+                Assert.That(fixture.victory.activeSelf, Is.True);
+                Assert.That(ReadGameplayBlocked(fixture.input), Is.True);
             }
             finally { DestroyFixture(fixture); }
         }
@@ -165,6 +214,8 @@ namespace BreakoutIsle.Tests
             pause.transform.SetParent(hudObject.transform, false);
             var caught = new GameObject("Caught");
             caught.transform.SetParent(hudObject.transform, false);
+            var victory = new GameObject("Victory");
+            victory.transform.SetParent(hudObject.transform, false);
             var retryObject = new GameObject("Retry", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
             retryObject.transform.SetParent(caught.transform, false);
             var retry = retryObject.GetComponent<Button>();
@@ -173,16 +224,18 @@ namespace BreakoutIsle.Tests
             serialized.FindProperty("input").objectReferenceValue = input;
             serialized.FindProperty("pausePanel").objectReferenceValue = pause;
             serialized.FindProperty("capturedPanel").objectReferenceValue = caught;
+            serialized.FindProperty("victoryPanel").objectReferenceValue = victory;
             if (includeRetry) serialized.FindProperty("retryButton").objectReferenceValue = retry;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             pause.SetActive(false);
             caught.SetActive(false);
+            victory.SetActive(false);
             hudObject.SetActive(true);
             // EditMode tests do not guarantee MonoBehaviour lifecycle callbacks. Rebind
             // deterministically so Button.onClick exercises the same listener path as play.
             InvokePrivate(hud, "OnDisable");
             InvokePrivate(hud, "OnEnable");
-            return new Fixture { hudObject = hudObject, inputObject = inputObject, input = input, hud = hud, pause = pause, caught = caught, retry = retry };
+            return new Fixture { hudObject = hudObject, inputObject = inputObject, input = input, hud = hud, pause = pause, caught = caught, victory = victory, retry = retry };
         }
 
         private static void InvokePrivate(object target, string methodName, params object[] arguments)
@@ -219,6 +272,7 @@ namespace BreakoutIsle.Tests
             public GameHudController hud;
             public GameObject pause;
             public GameObject caught;
+            public GameObject victory;
             public Button retry;
         }
     }
