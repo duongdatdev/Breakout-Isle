@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "name": "PoliceDog",
+  "processing": {
+    "cell_size": 64,
+    "fit_scale": 0.72,
+    "trim_border": 4,
+    "edge_clean_depth": 3,
+    "align": "feet",
+    "shared_scale": true,
+    "scale_strategy": "fit",
+    "component_mode": "largest",
+    "component_padding": 0,
+    "min_component_area": 1,
+    "edge_touch_margin": 0
+  },
+  "output_origin": [
+    32.0,
+    56
+  ],
+  "reference": {
+    "target": "creature",
+    "mode": "idle",
+    "rows": 8,
+    "cols": 4,
+    "body_scale_mean": 0.4254979731326346,
+    "body_scale_cv": 0.020853375913444824,
+    "anchor_y_mean": 0.8561003521126761
+  },
+  "qc": {
+    "max_body_scale_drift": 0.1
+  }
+}
