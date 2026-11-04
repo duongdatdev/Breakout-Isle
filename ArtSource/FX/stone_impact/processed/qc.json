@@ -1,0 +1,79 @@
+{
+  "source": "ArtSource\\FX\\stone_impact\\raw.png",
+  "artSource": "built-in image_gen",
+  "processing": "magenta chroma key, fixed-cell crop and nearest-neighbor resize; no recentering",
+  "rows": 2,
+  "columns": 2,
+  "size": 32,
+  "pixelsPerUnit": 32,
+  "pivot": [
+    0.5,
+    0.5
+  ],
+  "frames": [
+    {
+      "file": "stone_impact_00.png",
+      "sourceBox": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "alphaBounds": [
+        12,
+        16,
+        20,
+        21
+      ],
+      "sha256": "5293c3eec10d425bf9f4d2157e1f5bea4d2e9ed18e1cb4520f454ef228dd7b9f"
+    },
+    {
+      "file": "stone_impact_01.png",
+      "sourceBox": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "alphaBounds": [
+        8,
+        14,
+        22,
+        21
+      ],
+      "sha256": "fba9e48d724096aeddc2656e22a88038485b1eb1f9a82a4a2004cd35243fa135"
+    },
+    {
+      "file": "stone_impact_02.png",
+      "sourceBox": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "alphaBounds": [
+        10,
+        16,
+        22,
+        21
+      ],
+      "sha256": "ff3afc9e8f7b9376ac973dcc3c082cae0746d8581faea1682caec15b440056ee"
+    },
+    {
+      "file": "stone_impact_03.png",
+      "sourceBox": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        11,
+        19,
+        16,
+        21
+      ],
+      "sha256": "0944108a1c66acbf948c3be2e930c18f2941353036399350238c0a99fd77d545"
+    }
+  ]
+}

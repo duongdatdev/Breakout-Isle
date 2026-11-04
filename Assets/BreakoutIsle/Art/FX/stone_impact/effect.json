@@ -1,0 +1,22 @@
+{
+  "effect": "stone_impact",
+  "frames": [
+    "stone_impact_00.png",
+    "stone_impact_01.png",
+    "stone_impact_02.png",
+    "stone_impact_03.png"
+  ],
+  "fps": 10,
+  "loop": false,
+  "pixelsPerUnit": 32,
+  "pivot": [
+    0.5,
+    0.5
+  ],
+  "filter": "Point",
+  "mipmaps": false,
+  "compression": "None",
+  "artSource": "built-in image_gen",
+  "sourcePrompt": "ArtSource/FX/stone_impact/prompt-used.txt",
+  "sourceQc": "ArtSource/FX/stone_impact/processed/qc.json"
+}

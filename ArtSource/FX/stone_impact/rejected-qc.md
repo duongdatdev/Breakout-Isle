@@ -1,0 +1,1 @@
+Initial sheet rejected: the fourth frame became empty after magenta keying/downsampling. Retrying with explicitly opaque grey flecks and particle-count fade rather than blending into magenta. No partial frames exported to Unity.
