@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "props": [
+    {
+      "id": "valve_00",
+      "file": "valve_00.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "interactable"
+    },
+    {
+      "id": "valve_01",
+      "file": "valve_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "interactable"
+    },
+    {
+      "id": "valve_02",
+      "file": "valve_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "interactable"
+    },
+    {
+      "id": "valve_03",
+      "file": "valve_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "pixelsPerUnit": 32,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "center",
+      "role": "interactable"
+    }
+  ],
+  "animations": {
+    "valve": {
+      "frames": [
+        "valve_00",
+        "valve_01",
+        "valve_02",
+        "valve_03"
+      ],
+      "fps": 8,
+      "loop": false
+    }
+  }
+}

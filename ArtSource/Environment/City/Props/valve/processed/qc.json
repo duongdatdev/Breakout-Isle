@@ -1,0 +1,79 @@
+{
+  "source": "ArtSource\\Environment\\City\\Props\\valve\\raw.png",
+  "artSource": "built-in image_gen",
+  "processing": "magenta chroma key, fixed-cell crop and nearest-neighbor resize; no recentering",
+  "rows": 2,
+  "columns": 2,
+  "size": 64,
+  "pixelsPerUnit": 32,
+  "pivot": [
+    0.5,
+    0.5
+  ],
+  "frames": [
+    {
+      "file": "valve_00.png",
+      "sourceBox": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "alphaBounds": [
+        17,
+        12,
+        47,
+        50
+      ],
+      "sha256": "980768b87726bf992f29d7054a611cc3f0647800aed14ab5de48df491153bf5d"
+    },
+    {
+      "file": "valve_01.png",
+      "sourceBox": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "alphaBounds": [
+        17,
+        12,
+        47,
+        50
+      ],
+      "sha256": "cf3d1224e36bb230bb7865ffd9699c4c300fe36b2161d8c3d283afda0555eea1"
+    },
+    {
+      "file": "valve_02.png",
+      "sourceBox": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "alphaBounds": [
+        17,
+        12,
+        47,
+        50
+      ],
+      "sha256": "2074762b1bbd184fa78efd5ed85224ca00eb7be44d096c8a557579bd51d824a9"
+    },
+    {
+      "file": "valve_03.png",
+      "sourceBox": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        17,
+        12,
+        47,
+        50
+      ],
+      "sha256": "0c6da3b6d685375869ffbc9606322be565873835fc9b33454acff21ae8fb36a1"
+    }
+  ]
+}
