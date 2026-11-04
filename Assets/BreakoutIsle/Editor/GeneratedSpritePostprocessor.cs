@@ -55,10 +55,23 @@ namespace BreakoutIsle.Editor
                 return;
             }
 
-            const string prisonPropsPath = "Assets/BreakoutIsle/Art/Environment/Prison/Props/";
-            if (normalizedPath.StartsWith(prisonPropsPath, StringComparison.Ordinal) && Path.GetExtension(normalizedPath) == ".png")
+            const string campaignTilesRoot = "Assets/BreakoutIsle/Art/Environment/";
+            if ((normalizedPath.StartsWith(campaignTilesRoot + "Forest/Tiles/", StringComparison.Ordinal) ||
+                 normalizedPath.StartsWith(campaignTilesRoot + "City/Tiles/", StringComparison.Ordinal)) &&
+                Path.GetExtension(normalizedPath) == ".png")
             {
-                ApplyPropSettings(importer, normalizedPath);
+                ApplyTileSettings(importer, Path.GetFileName(normalizedPath).EndsWith("-atlas.png", StringComparison.Ordinal));
+                return;
+            }
+
+            const string environmentRoot = "Assets/BreakoutIsle/Art/Environment/";
+            const string propsSegment = "/Props/";
+            var propsSegmentIndex = normalizedPath.IndexOf(propsSegment, StringComparison.Ordinal);
+            if (normalizedPath.StartsWith(environmentRoot, StringComparison.Ordinal) &&
+                propsSegmentIndex >= environmentRoot.Length && Path.GetExtension(normalizedPath) == ".png")
+            {
+                var propsRoot = normalizedPath.Substring(0, propsSegmentIndex + propsSegment.Length);
+                ApplyPropSettings(importer, normalizedPath, propsRoot);
                 return;
             }
 
@@ -154,10 +167,14 @@ namespace BreakoutIsle.Editor
             importer.alphaIsTransparency = true;
         }
 
-        private static void ApplyPropSettings(TextureImporter importer, string normalizedPath)
+        private static void ApplyPropSettings(TextureImporter importer, string normalizedPath, string propsRoot)
         {
-            const string propsRoot = "Assets/BreakoutIsle/Art/Environment/Prison/Props/";
             var manifestPath = Path.Combine(propsRoot, "props.json");
+            if (!File.Exists(manifestPath))
+            {
+                Debug.LogError($"Prop texture '{normalizedPath}' has no manifest at '{manifestPath}'.");
+                return;
+            }
             var manifest = JsonUtility.FromJson<PropsManifest>(File.ReadAllText(manifestPath));
             PropEntry entry = null;
             var relativeFile = normalizedPath.Substring(propsRoot.Length).Replace('\\', '/');
@@ -165,7 +182,7 @@ namespace BreakoutIsle.Editor
             {
                 foreach (var prop in manifest.props)
                 {
-                    if (prop.file.Replace('\\', '/') == relativeFile)
+                    if (prop != null && prop.file != null && prop.file.Replace('\\', '/') == relativeFile)
                     {
                         entry = prop;
                         break;

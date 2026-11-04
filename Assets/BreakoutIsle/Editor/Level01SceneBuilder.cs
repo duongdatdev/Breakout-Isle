@@ -118,7 +118,6 @@ namespace BreakoutIsle.Editor
             interactorSerialized.ApplyModifiedPropertiesWithoutUndo();
             var actionAnimator = player.GetComponent<PlayerActionAnimator>();
             if (actionAnimator == null) throw new System.InvalidOperationException("Rook player action animator prefab was not rebuilt.");
-            actionAnimator.BindGameplayEvents(interactor, session, player.GetComponent<PlayerStealthState>());
 
             var safeSpawn = new GameObject("Safe Spawn - Cell");
             safeSpawn.transform.position = player.transform.position;
@@ -168,6 +167,10 @@ namespace BreakoutIsle.Editor
             var cameraFollow = new SerializedObject(cameraObject.GetComponent<PixelCameraFollow>());
             cameraFollow.FindProperty("target").objectReferenceValue = player.transform;
             cameraFollow.ApplyModifiedPropertiesWithoutUndo();
+            var supportProjectile = SupportItemSceneBuilder.BuildProjectilePrefab();
+            var supportItems = SupportItemSceneBuilder.ConfigurePlayer(player, session, camera,
+                (1 << LayerMask.NameToLayer("Vision")) | (1 << LayerMask.NameToLayer("Hiding")), supportProjectile);
+            actionAnimator.BindGameplayEvents(interactor, session, player.GetComponent<PlayerStealthState>(), supportItems);
 
             MakeProp("Cell Bed", "bed", new Vector2(5.5f, 7.1f), true);
             var pillow = MakeProp("Hidden Spoon Pillow", "pillow", new Vector2(6.1f, 7.9f), false);

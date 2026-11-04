@@ -15,42 +15,42 @@ MonoBehaviour:
   levelId: prison-02
   steps:
   - id: power_cut
-    description: "Cut power in the engineering room"
-    prerequisiteId: ""
+    description: "T\u1EAFt \u0111i\u1EC7n \u1EDF ph\xF2ng k\u1EF9 thu\u1EADt"
+    prerequisiteId: 
     requiredCompletedObjectiveIds: []
     canCompleteOutOfOrder: 0
-    sequenceGroupId: ""
+    sequenceGroupId: 
     sequenceIndex: 0
-    requiredQuestItemId: ""
+    requiredQuestItemId: 
     consumeRequiredItem: 0
-    rewardQuestItemId: ""
+    rewardQuestItemId: 
   - id: laundry_chest_key_found
-    description: "Find the laundry chest key"
-    prerequisiteId: "power_cut"
+    description: "T\xECm ch\xECa kh\xF3a h\xF2m trong ph\xF2ng gi\u1EB7t"
+    prerequisiteId: power_cut
     requiredCompletedObjectiveIds: []
     canCompleteOutOfOrder: 0
-    sequenceGroupId: ""
+    sequenceGroupId: 
     sequenceIndex: 0
-    requiredQuestItemId: ""
+    requiredQuestItemId: 
     consumeRequiredItem: 0
-    rewardQuestItemId: "laundry_chest_key"
+    rewardQuestItemId: laundry_chest_key
   - id: yard_gate_key_found
-    description: "Open the chest and take the yard gate key"
-    prerequisiteId: "laundry_chest_key_found"
+    description: "M\u1EDF h\xF2m l\u1EA5y ch\xECa kh\xF3a c\u1ED5ng s\xE2n"
+    prerequisiteId: laundry_chest_key_found
     requiredCompletedObjectiveIds: []
     canCompleteOutOfOrder: 0
-    sequenceGroupId: ""
+    sequenceGroupId: 
     sequenceIndex: 0
-    requiredQuestItemId: "laundry_chest_key"
+    requiredQuestItemId: laundry_chest_key
     consumeRequiredItem: 1
-    rewardQuestItemId: "yard_gate_key"
+    rewardQuestItemId: yard_gate_key
   - id: yard_gate_opened
-    description: "Open the yard gate"
-    prerequisiteId: "yard_gate_key_found"
+    description: "D\xF9ng ch\xECa kh\xF3a m\u1EDF c\u1ED5ng s\xE2n t\xF9"
+    prerequisiteId: yard_gate_key_found
     requiredCompletedObjectiveIds: []
     canCompleteOutOfOrder: 0
-    sequenceGroupId: ""
+    sequenceGroupId: 
     sequenceIndex: 0
-    requiredQuestItemId: "yard_gate_key"
+    requiredQuestItemId: yard_gate_key
     consumeRequiredItem: 1
-    rewardQuestItemId: ""
+    rewardQuestItemId: 
