@@ -3,14 +3,6 @@ using UnityEngine;
 
 namespace BreakoutIsle.Gameplay
 {
-    public static class SupportItemEffectSystem
-    {
-        public static event System.Action<Vector2, float> MeatDistractRequested;
-
-        public static void RequestMeatDistraction(Vector2 position, float durationSeconds) =>
-            MeatDistractRequested?.Invoke(position, durationSeconds);
-    }
-
     public sealed class SupportProjectile : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
@@ -34,7 +26,8 @@ namespace BreakoutIsle.Gameplay
         public bool Launch(string itemId, Vector2 start, Vector2 destination, SupportItemProfile profile,
             LayerMask obstacleMask, float flightDuration)
         {
-            if (_launched || profile == null || profile.itemId != itemId || flightDuration <= 0f) return false;
+            if (_launched || profile == null || profile.itemId != itemId || flightDuration <= 0f ||
+                profile.attractsDogs && profile.projectileSprite == null) return false;
             _launched = true;
             _startPosition = start;
             _groundPosition = start;
@@ -88,7 +81,12 @@ namespace BreakoutIsle.Gameplay
             if (fuseRemaining > 0f)
                 yield return new WaitForSeconds(fuseRemaining);
             if (_profile.attractsDogs)
-                SupportItemEffectSystem.RequestMeatDistraction(_groundPosition, 8f);
+            {
+                var source = GetComponent<MeatDistractionSource>();
+                if (source == null) source = gameObject.AddComponent<MeatDistractionSource>();
+                source.Land(_groundPosition, _profile.projectileSprite, Time.time);
+                yield break;
+            }
             switch (_profile.noisePolicy)
             {
                 case SupportNoisePolicy.NearestGuard:

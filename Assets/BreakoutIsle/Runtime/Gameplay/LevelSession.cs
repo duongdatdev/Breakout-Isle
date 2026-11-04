@@ -18,6 +18,7 @@ namespace BreakoutIsle.Gameplay
         public int SelectedSupportSlot => selectedSupportSlot;
         public IReadOnlyList<StoryFlagRecord> PersistentStoryFlags => persistentStoryFlags;
         public event Action InventoryChanged;
+        public event Action<string> OutfitChanged;
         public event Action<string> MessageShown;
         public event Action<string> ObjectiveCompleted;
         public event Action QuestCompleted;
@@ -45,10 +46,12 @@ namespace BreakoutIsle.Gameplay
 
         public void ResetForNewGame()
         {
+            var outfitChanged = outfitId != "prison";
             outfitId = "prison";
             selectedSupportSlot = 0;
             persistentStoryFlags = new List<StoryFlagRecord>();
             InitializeRuntimeState();
+            if (outfitChanged) OutfitChanged?.Invoke(outfitId);
             InventoryChanged?.Invoke();
         }
 
@@ -101,7 +104,9 @@ namespace BreakoutIsle.Gameplay
         public bool SetOutfit(string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return false;
+            if (outfitId == id) return true;
             outfitId = id;
+            OutfitChanged?.Invoke(outfitId);
             return true;
         }
 
@@ -141,7 +146,9 @@ namespace BreakoutIsle.Gameplay
                 error = "Quest or inventory state could not be restored.";
                 return false;
             }
+            var outfitChanged = outfitId != snapshot.outfitId;
             outfitId = snapshot.outfitId;
+            if (outfitChanged) OutfitChanged?.Invoke(outfitId);
             selectedSupportSlot = snapshot.selectedSupportSlot;
             persistentStoryFlags = new List<StoryFlagRecord>();
             foreach (var flag in snapshot.storyFlags)

@@ -393,6 +393,31 @@ namespace BreakoutIsle.Tests
         }
 
         [Test]
+        public void OutfitChangedFiresOnSetRestoreAndNewGameReset()
+        {
+            var definition = CreateSet();
+            definition.levelId = "test-level";
+            var sessionObject = new GameObject("outfit-session-test");
+            sessionObject.SetActive(false);
+            _objects.Add(sessionObject);
+            var session = sessionObject.AddComponent<LevelSession>();
+            SetReference(session, "objectives", definition);
+            sessionObject.SetActive(true);
+            session.InitializeRuntimeState();
+            var outfits = new List<string>();
+            session.OutfitChanged += outfits.Add;
+
+            Assert.That(session.SetOutfit("civilian"), Is.True);
+            var snapshot = SaveSnapshot.Create("test-level", "checkpoint-test");
+            snapshot.outfitId = "prison";
+            Assert.That(session.TryApplySnapshot(snapshot, out var error), Is.True, error);
+            Assert.That(session.SetOutfit("civilian"), Is.True);
+            session.ResetForNewGame();
+
+            Assert.That(outfits, Is.EqualTo(new[] { "civilian", "prison", "civilian", "prison" }));
+        }
+
+        [Test]
         public void MissingNextLevelDoesNotReportCampaignCompleteAndShowsFeedback()
         {
             var objectives = CreateSet();
