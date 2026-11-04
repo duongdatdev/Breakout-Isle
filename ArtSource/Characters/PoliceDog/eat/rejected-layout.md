@@ -1,0 +1,1 @@
+The initial sheet showed the front face in the north row and inconsistent northwest poses. Rejected before cleanup/export. Retrying against the accepted full eight-direction sniff sheet rather than a single front-facing identity frame.
