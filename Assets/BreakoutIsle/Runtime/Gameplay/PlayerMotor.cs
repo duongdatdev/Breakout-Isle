@@ -13,6 +13,7 @@ namespace BreakoutIsle.Gameplay
         private Rigidbody2D _body;
         private Animator _animator;
         private PlayerInputReader _input;
+        private PlayerMovementModifiers _movementModifiers;
         private Vector2 _facing = Vector2.down;
         private Vector2 _previousPhysicsPosition;
         private readonly StaminaMeter _stamina = new StaminaMeter();
@@ -32,6 +33,7 @@ namespace BreakoutIsle.Gameplay
             _body = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _input = GetComponent<PlayerInputReader>();
+            _movementModifiers = GetComponent<PlayerMovementModifiers>();
             _body.gravityScale = 0f;
             _body.freezeRotation = true;
             _previousPhysicsPosition = _body.position;
@@ -48,6 +50,8 @@ namespace BreakoutIsle.Gameplay
             var actualDelta = _body.position - _previousPhysicsPosition;
             _previousPhysicsPosition = _body.position;
             var actuallyMoving = actualDelta.sqrMagnitude > InputDeadZone * InputDeadZone;
+            if (actuallyMoving)
+                ScentTrailSystem.RecordMovement(_body.position, Time.time);
             var staminaSprint = _stamina.Tick(_lastStepSprintRequested && actuallyMoving && !_lastStepFreeSprint, Time.fixedDeltaTime);
             var sprintedThisStep = actuallyMoving && _lastStepSprintRequested && (_lastStepFreeSprint || staminaSprint);
             EmitFootstepNoise(actuallyMoving, _lastStepSneaking, sprintedThisStep, Time.fixedDeltaTime);
@@ -58,7 +62,8 @@ namespace BreakoutIsle.Gameplay
             var sprintRequested = _input != null && _input.SprintHeld && !sneaking && hasMoveInput;
             var freeSprint = _freeSprintTime > 0f;
             var sprinting = sprintRequested && (freeSprint || _stamina.CanSprint);
-            var speed = sneaking ? SneakSpeed : sprinting ? SprintSpeed : WalkSpeed;
+            var speed = (sneaking ? SneakSpeed : sprinting ? SprintSpeed : WalkSpeed) *
+                        (_movementModifiers != null ? _movementModifiers.SpeedMultiplier : 1f);
             if (hasMoveInput)
                 _body.MovePosition(_body.position + movement * (speed * Time.fixedDeltaTime));
             _lastStepSneaking = sneaking;
@@ -125,6 +130,7 @@ namespace BreakoutIsle.Gameplay
             }
             _input?.ResetGameplayInputUntilNeutral();
             _input?.SetGameplayBlocked(false);
+            ForestGameplayResetter.ResetTransientState();
         }
     }
 
