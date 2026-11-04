@@ -1,0 +1,79 @@
+{
+  "source": "ArtSource\\FX\\pickup_glimmer\\raw.png",
+  "artSource": "built-in image_gen",
+  "processing": "magenta chroma key, fixed-cell crop and nearest-neighbor resize; no recentering",
+  "rows": 2,
+  "columns": 2,
+  "size": 32,
+  "pixelsPerUnit": 32,
+  "pivot": [
+    0.5,
+    0.5
+  ],
+  "frames": [
+    {
+      "file": "pickup_glimmer_00.png",
+      "sourceBox": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "alphaBounds": [
+        12,
+        18,
+        21,
+        21
+      ],
+      "sha256": "291a656b9155e49f83449237afed5b894ce638e8c79b20d95db26b309c4aca0a"
+    },
+    {
+      "file": "pickup_glimmer_01.png",
+      "sourceBox": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "alphaBounds": [
+        10,
+        14,
+        21,
+        20
+      ],
+      "sha256": "02b7ea610d5b68e22da975f866d894eb753fcda9a08c55cd6d8c1bd4c7219f1d"
+    },
+    {
+      "file": "pickup_glimmer_02.png",
+      "sourceBox": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "alphaBounds": [
+        10,
+        13,
+        22,
+        17
+      ],
+      "sha256": "a763dc37846d93b18f790b8200efffc64e9642d61ee1786f910c6139ab4843dc"
+    },
+    {
+      "file": "pickup_glimmer_03.png",
+      "sourceBox": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        11,
+        16,
+        12,
+        17
+      ],
+      "sha256": "15362b23373a98502582cee3d977164884bfdb5d4f7748a77104eab4b8e04652"
+    }
+  ]
+}

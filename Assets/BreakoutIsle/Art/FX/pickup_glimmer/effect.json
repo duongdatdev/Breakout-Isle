@@ -1,0 +1,22 @@
+{
+  "effect": "pickup_glimmer",
+  "frames": [
+    "pickup_glimmer_00.png",
+    "pickup_glimmer_01.png",
+    "pickup_glimmer_02.png",
+    "pickup_glimmer_03.png"
+  ],
+  "fps": 10,
+  "loop": false,
+  "pixelsPerUnit": 32,
+  "pivot": [
+    0.5,
+    0.5
+  ],
+  "filter": "Point",
+  "mipmaps": false,
+  "compression": "None",
+  "artSource": "built-in image_gen",
+  "sourcePrompt": "ArtSource/FX/pickup_glimmer/prompt-used.txt",
+  "sourceQc": "ArtSource/FX/pickup_glimmer/processed/qc.json"
+}
