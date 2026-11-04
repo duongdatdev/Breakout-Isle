@@ -1,0 +1,281 @@
+{
+  "source": "raw-tiles.png",
+  "artSource": "built-in image_gen",
+  "rows": 4,
+  "columns": 4,
+  "tiles": [
+    {
+      "id": "cobblestone",
+      "file": "cobblestone.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        3,
+        311,
+        311
+      ],
+      "collider": "none",
+      "terrain": "cobblestone"
+    },
+    {
+      "id": "asphalt",
+      "file": "asphalt.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        3,
+        624,
+        311
+      ],
+      "collider": "none",
+      "terrain": "asphalt"
+    },
+    {
+      "id": "concrete",
+      "file": "concrete.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        3,
+        937,
+        311
+      ],
+      "collider": "none",
+      "terrain": "concrete"
+    },
+    {
+      "id": "wood_planks",
+      "file": "wood_planks.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        3,
+        1251,
+        311
+      ],
+      "collider": "none",
+      "terrain": "wood_planks"
+    },
+    {
+      "id": "sewer_floor",
+      "file": "sewer_floor.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        317,
+        311,
+        624
+      ],
+      "collider": "none",
+      "terrain": "sewer_floor"
+    },
+    {
+      "id": "sewer_water",
+      "file": "sewer_water.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        317,
+        624,
+        624
+      ],
+      "collider": "none",
+      "terrain": "sewer_water"
+    },
+    {
+      "id": "harbor_water",
+      "file": "harbor_water.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        317,
+        937,
+        624
+      ],
+      "collider": "none",
+      "terrain": "harbor_water"
+    },
+    {
+      "id": "metal_deck",
+      "file": "metal_deck.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        317,
+        1251,
+        624
+      ],
+      "collider": "none",
+      "terrain": "metal_deck"
+    },
+    {
+      "id": "brick_wall",
+      "file": "brick_wall.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        630,
+        311,
+        937
+      ],
+      "collider": "none",
+      "terrain": "brick_wall"
+    },
+    {
+      "id": "corrugated_wall",
+      "file": "corrugated_wall.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        630,
+        624,
+        937
+      ],
+      "collider": "none",
+      "terrain": "corrugated_wall"
+    },
+    {
+      "id": "sewer_wall",
+      "file": "sewer_wall.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        630,
+        937,
+        937
+      ],
+      "collider": "none",
+      "terrain": "sewer_wall"
+    },
+    {
+      "id": "warehouse_wall",
+      "file": "warehouse_wall.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        630,
+        1251,
+        937
+      ],
+      "collider": "none",
+      "terrain": "warehouse_wall"
+    },
+    {
+      "id": "curb_left",
+      "file": "curb_left.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        3,
+        943,
+        311,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "curb_left"
+    },
+    {
+      "id": "curb_right",
+      "file": "curb_right.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        317,
+        943,
+        624,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "curb_right"
+    },
+    {
+      "id": "curb_top",
+      "file": "curb_top.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        630,
+        943,
+        937,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "curb_top"
+    },
+    {
+      "id": "curb_bottom",
+      "file": "curb_bottom.png",
+      "size": [
+        32,
+        32
+      ],
+      "pixelsPerUnit": 32,
+      "sourceBox": [
+        943,
+        943,
+        1251,
+        1251
+      ],
+      "collider": "none",
+      "terrain": "curb_bottom"
+    }
+  ],
+  "postprocess": "fixed cell crop, 3px separator trim, nearest-neighbor downsample"
+}
