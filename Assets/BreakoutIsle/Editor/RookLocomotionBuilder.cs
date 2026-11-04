@@ -37,8 +37,6 @@ namespace BreakoutIsle.Editor
             var clipsFolder = OutputPath + "/Clips";
             EnsureFolder("Assets/BreakoutIsle/Animations");
             EnsureFolder(OutputPath);
-            if (AssetDatabase.IsValidFolder(clipsFolder))
-                AssetDatabase.DeleteAsset(clipsFolder);
             EnsureFolder(clipsFolder);
 
             foreach (var actionName in locomotionActionNames)
@@ -60,13 +58,12 @@ namespace BreakoutIsle.Editor
             }
 
             var controllerPath = OutputPath + "/RookPrison.controller";
-            if (AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath) != null)
-                AssetDatabase.DeleteAsset(controllerPath);
             var controller = BuildController(controllerPath, clipsByAction, actionNames);
             BuildPlayerPrefab(controller, LoadIdleSouthSprite(), actionDefinitions.ToArray());
+            RookCivilianAnimationBuilder.Build();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"Built Rook's four locomotion blend trees, eight directional action sets, and player prefab at {PrefabPath}.");
+            Debug.Log($"Updated Rook's prison and civilian animation controllers in place and saved the player prefab at {PrefabPath}.");
         }
 
         private static ActionManifest ReadManifest(string actionName)
@@ -115,18 +112,18 @@ namespace BreakoutIsle.Editor
                     value = frames[manifest.frameCount - 1].value
                 };
 
-                var clip = new AnimationClip
+                var generated = new AnimationClip
                 {
                     name = $"{actionName}_{direction}",
                     frameRate = manifest.fps,
                     wrapMode = manifest.loop ? WrapMode.Loop : WrapMode.Once
                 };
                 var binding = EditorCurveBinding.PPtrCurve(string.Empty, typeof(SpriteRenderer), "m_Sprite");
-                AnimationUtility.SetObjectReferenceCurve(clip, binding, frames);
-                var settings = AnimationUtility.GetAnimationClipSettings(clip);
+                AnimationUtility.SetObjectReferenceCurve(generated, binding, frames);
+                var settings = AnimationUtility.GetAnimationClipSettings(generated);
                 settings.loopTime = manifest.loop;
-                AnimationUtility.SetAnimationClipSettings(clip, settings);
-                AssetDatabase.CreateAsset(clip, clipsFolder + "/" + clip.name + ".anim");
+                AnimationUtility.SetAnimationClipSettings(generated, settings);
+                var clip = StoreClipWithoutReplacingGuid(generated, clipsFolder + "/" + generated.name + ".anim");
                 clips.Add(direction, clip);
             }
 
@@ -135,7 +132,20 @@ namespace BreakoutIsle.Editor
 
         private static AnimatorController BuildController(string controllerPath, Dictionary<string, Dictionary<string, AnimationClip>> clipsByAction, string[] actionNames)
         {
-            var controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath);
+            if (controller == null)
+                controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
+
+            var stateMachine = controller.layers[0].stateMachine;
+            foreach (var child in stateMachine.states)
+                stateMachine.RemoveState(child.state);
+            stateMachine.defaultState = null;
+            for (var i = controller.parameters.Length - 1; i >= 0; i--)
+                controller.RemoveParameter(i);
+            foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(controllerPath))
+                if (asset is BlendTree oldTree)
+                    UnityEngine.Object.DestroyImmediate(oldTree, true);
+
             controller.AddParameter("MoveMode", AnimatorControllerParameterType.Float);
             controller.AddParameter("FacingX", AnimatorControllerParameterType.Float);
             controller.AddParameter("FacingY", AnimatorControllerParameterType.Float);
@@ -154,7 +164,6 @@ namespace BreakoutIsle.Editor
             AddDirectionalTree(controller, locomotion, "run", clipsByAction["run"], 2f);
             AddDirectionalTree(controller, locomotion, "sneak", clipsByAction["sneak"], 3f);
 
-            var stateMachine = controller.layers[0].stateMachine;
             var state = stateMachine.AddState("Rook Locomotion");
             state.motion = locomotion;
             stateMachine.defaultState = state;
@@ -168,6 +177,21 @@ namespace BreakoutIsle.Editor
             }
             EditorUtility.SetDirty(controller);
             return controller;
+        }
+
+        private static AnimationClip StoreClipWithoutReplacingGuid(AnimationClip generated, string path)
+        {
+            var existing = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
+            if (existing == null)
+            {
+                AssetDatabase.CreateAsset(generated, path);
+                return generated;
+            }
+
+            EditorUtility.CopySerialized(generated, existing);
+            EditorUtility.SetDirty(existing);
+            UnityEngine.Object.DestroyImmediate(generated);
+            return existing;
         }
 
         private static Sprite LoadIdleSouthSprite()

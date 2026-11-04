@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5257978568775831438}
   - component: {fileID: 1878765288061891091}
   - component: {fileID: 256159642150819448}
+  - component: {fileID: 36435835361678120}
   m_Layer: 6
   m_Name: RookPlayer
   m_TagString: Untagged
@@ -278,3 +279,19 @@ MonoBehaviour:
     frameCount: 6
     fps: 10
     loop: 0
+--- !u!114 &36435835361678120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5599815634445669068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8233e37af312847a80aafc8ecb3d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Gameplay.PlayerOutfitAnimator
+  animator: {fileID: 4195497010741138862}
+  prisonController: {fileID: 9100000, guid: a9f70095f6d585047b33baa8a3539c6d, type: 2}
+  civilianController: {fileID: 22100000, guid: c9cbfa79698187a43b6f310c3be60456, type: 2}
+  session: {fileID: 0}

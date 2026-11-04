@@ -13,6 +13,60 @@ using UnityEngine.UI;
 
 namespace BreakoutIsle.Editor
 {
+    [Serializable]
+    public sealed class LevelMapRegion
+    {
+        public string name;
+        public Rect worldRect;
+        public Color color;
+        public string label;
+
+        public LevelMapRegion(string regionName, Rect rect, Color tint, string regionLabel = "")
+        {
+            name = regionName;
+            worldRect = rect;
+            color = tint;
+            label = regionLabel;
+        }
+    }
+
+    [Serializable]
+    public sealed class LevelMapMarker
+    {
+        public string name;
+        public Vector2 worldPosition;
+        public Color color;
+        public string label;
+        public float size;
+
+        public LevelMapMarker(string markerName, Vector2 position, Color tint, string markerLabel = "", float markerSize = 8f)
+        {
+            name = markerName;
+            worldPosition = position;
+            color = tint;
+            label = markerLabel;
+            size = markerSize;
+        }
+    }
+
+    [Serializable]
+    public sealed class LevelMapLayout
+    {
+        public string levelTitle = "NHÀ TÙ · CỤM 01";
+        public string miniMapTitle = "SƠ ĐỒ KHU VỰC";
+        public string mapTitle = "SƠ ĐỒ NHÀ TÙ";
+        public Rect worldBounds = new Rect(2f, 2f, 36f, 20f);
+        public Vector2 miniMapContentPosition = new Vector2(8f, 14f);
+        public Vector2 miniMapContentSize = new Vector2(121f, 61f);
+        public Vector2 fullMapContentPosition = new Vector2(10f, 13f);
+        public Vector2 fullMapContentSize = new Vector2(154f, 130f);
+        public bool showDiscoveredHidingSpots = true;
+        public float miniHidingMarkerSize = 4f;
+        public float fullHidingMarkerSize = 6f;
+        public LevelMapRegion[] regions = Array.Empty<LevelMapRegion>();
+        public LevelMapMarker[] markers = Array.Empty<LevelMapMarker>();
+    }
+
     public static class BreakoutUiBuilder
     {
         private const string Root = "Assets/BreakoutIsle";
@@ -21,7 +75,32 @@ namespace BreakoutIsle.Editor
         private const string SkinPath = Root + "/Art/UI/Skins/";
         private const string IconPath = Root + "/Art/UI/Icons/";
         private const string MenuPath = Root + "/Art/UI/Menu/menu_background.png";
-        private static readonly Rect Level01MapBounds = new Rect(2f, 2f, 36f, 20f);
+
+        public static LevelMapLayout CreateLevel02MapLayout(Vector2 exitPosition)
+        {
+            return new LevelMapLayout
+            {
+                levelTitle = "NHÀ TÙ · MÀN 02/10",
+                miniMapTitle = "SƠ ĐỒ KHU VỰC",
+                mapTitle = "SƠ ĐỒ NHÀ TÙ · MÀN 02/10",
+                worldBounds = new Rect(2f, 2f, 42f, 26f),
+                miniMapContentPosition = new Vector2(19.25f, 14f),
+                miniMapContentSize = new Vector2(98.5f, 61f),
+                fullMapContentPosition = new Vector2(10f, 31.5f),
+                fullMapContentSize = new Vector2(154f, 95.3f),
+                regions = new[]
+                {
+                    new LevelMapRegion("Cafeteria", new Rect(2f, 2f, 16f, 11f), new Color(0.88f, 0.58f, 0.28f), "NHÀ ĂN"),
+                    new LevelMapRegion("Laundry", new Rect(21f, 2f, 15f, 11f), new Color(0.46f, 0.64f, 0.69f), "GIẶT"),
+                    new LevelMapRegion("Engineering", new Rect(2f, 16f, 9f, 11f), new Color(0.54f, 0.63f, 0.48f), "CƠ KHÍ"),
+                    new LevelMapRegion("Yard approach", new Rect(30f, 8f, 13f, 10f), new Color(0.78f, 0.70f, 0.45f), "LỐI RA")
+                },
+                markers = new[]
+                {
+                    new LevelMapMarker("Exit marker", exitPosition, new Color(1f, 0.48f, 0.27f), "RA", 10f)
+                }
+            };
+        }
 
         [MenuItem("Breakout Isle/Audio/Build Audio Catalog")]
         public static AudioCatalog BuildAudioCatalog()
@@ -65,10 +144,12 @@ namespace BreakoutIsle.Editor
             return catalog;
         }
 
-        public static GameObject BuildLevelHud(GameObject player, LevelSession session, CheckpointSaveCoordinator checkpointCoordinator = null)
+        public static GameObject BuildLevelHud(GameObject player, LevelSession session,
+            CheckpointSaveCoordinator checkpointCoordinator = null, LevelMapLayout mapLayout = null)
         {
             if (player == null) throw new ArgumentNullException(nameof(player));
             if (session == null) throw new ArgumentNullException(nameof(session));
+            mapLayout = ValidateMapLayout(mapLayout ?? CreateLevel01MapLayout());
             EnsureEventSystem();
             var canvasRoot = new GameObject("Game HUD", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvasRoot.SetActive(false);
@@ -89,7 +170,8 @@ namespace BreakoutIsle.Editor
 
             var top = CreateImage(canvasRoot.transform, "HUD Panel", panelSprite, new Vector2(0, 1), new Vector2(0, 1), new Vector2(12, -10), new Vector2(218, 68), Image.Type.Sliced);
             top.raycastTarget = true;
-            var heading = CreateText(top.transform, "Level Heading", "NHÀ TÙ · CỤM 01", 15, new Vector2(0, 1), new Vector2(10, -4), new Vector2(188, 20));
+            var heading = CreateText(top.transform, "Level Heading", mapLayout.levelTitle, 15, new Vector2(0, 1), new Vector2(10, -4), new Vector2(188, 20));
+            if (mapLayout.levelTitle.Length > 16) heading.fontSize = 13;
             heading.color = new Color(1f, 0.78f, 0.36f);
             var staminaCaption = CreateText(top.transform, "Stamina Caption", "THỂ LỰC", 10, new Vector2(0, 1), new Vector2(10, -28), new Vector2(49, 14));
             var staminaTrack = CreateImage(top.transform, "Stamina Track", buttonSprite, new Vector2(0, 1), new Vector2(0, 1), new Vector2(64, -30), new Vector2(138, 10), Image.Type.Sliced);
@@ -101,11 +183,11 @@ namespace BreakoutIsle.Editor
 
             var mini = CreateImage(canvasRoot.transform, "Minimap Panel", panelSprite, new Vector2(1, 1), new Vector2(1, 1), new Vector2(-12, -10), new Vector2(137, 95), Image.Type.Sliced);
             mini.raycastTarget = true;
-            CreateText(mini.transform, "Minimap Heading", "SƠ ĐỒ KHU VỰC", 11, new Vector2(0.5f, 1), new Vector2(0, -7), new Vector2(128, 16)).alignment = TextAnchor.MiddleCenter;
-            var miniContent = BuildMiniMap(mini.transform, player.transform);
+            CreateText(mini.transform, "Minimap Heading", mapLayout.miniMapTitle, 11, new Vector2(0.5f, 1), new Vector2(0, -7), new Vector2(128, 16)).alignment = TextAnchor.MiddleCenter;
+            var miniContent = BuildMapContent(mini.transform, player.transform, mapLayout, true);
             var miniMarker = CreateMapMarker(miniContent, "Rook marker", new Color(1f, 0.82f, 0.25f));
             var miniTracker = canvasRoot.AddComponent<MinimapPlayerMarker>();
-            miniTracker.Bind(miniContent, miniMarker, player.transform, Level01MapBounds);
+            miniTracker.Bind(miniContent, miniMarker, player.transform, mapLayout.worldBounds);
             EditorUtility.SetDirty(miniTracker);
 
             var objectivePanel = CreateImage(canvasRoot.transform, "Tab Map and Objectives", panelSprite, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(490, 260), Image.Type.Sliced).gameObject;
@@ -114,12 +196,14 @@ namespace BreakoutIsle.Editor
             objectiveText.alignment = TextAnchor.UpperLeft;
             var inventoryText = CreateText(objectivePanel.transform, "Quest and Support Items", "", 10, new Vector2(0, 0), new Vector2(20, 16), new Vector2(270, 40));
             inventoryText.alignment = TextAnchor.LowerLeft;
-            CreateText(objectivePanel.transform, "Map Title", "SƠ ĐỒ NHÀ TÙ", 16, new Vector2(1, 1), new Vector2(-100, -34), new Vector2(170, 24)).alignment = TextAnchor.MiddleCenter;
+            var mapTitle = CreateText(objectivePanel.transform, "Map Title", mapLayout.mapTitle, 16, new Vector2(1, 1), new Vector2(-100, -34), new Vector2(170, 24));
+            if (mapLayout.mapTitle.Length > 18) mapTitle.fontSize = 13;
+            mapTitle.alignment = TextAnchor.MiddleCenter;
             var mapArea = CreateImage(objectivePanel.transform, "Map Area", panelSprite, new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-18, -3), new Vector2(174, 158), Image.Type.Sliced);
-            var fullMapContent = BuildPrisonMap(mapArea.transform, player.transform);
+            var fullMapContent = BuildMapContent(mapArea.transform, player.transform, mapLayout, false);
             var fullMapMarker = CreateMapMarker(fullMapContent, "Rook map marker", new Color(1f, 0.82f, 0.25f));
             var fullMapTracker = canvasRoot.AddComponent<MinimapPlayerMarker>();
-            fullMapTracker.Bind(fullMapContent, fullMapMarker, player.transform, Level01MapBounds);
+            fullMapTracker.Bind(fullMapContent, fullMapMarker, player.transform, mapLayout.worldBounds);
             EditorUtility.SetDirty(fullMapTracker);
             var mapClose = CreateButton(objectivePanel.transform, "ĐÓNG · TAB", buttonSprite, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 15), new Vector2(135, 30));
             objectivePanel.SetActive(false);
@@ -283,52 +367,78 @@ namespace BreakoutIsle.Editor
             system.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
         }
 
-        private static RectTransform BuildMiniMap(Transform parent, Transform player)
+        public static LevelMapLayout CreateLevel01MapLayout()
         {
-            var content = CreateMapContent(parent, "Minimap floorplan", new Vector2(8, 14), new Vector2(121, 61));
-            AddMapRegion(content, "Cell", new Rect(2, 2, 6, 7), new Color(0.93f, 0.61f, 0.23f), "");
-            AddMapRegion(content, "Vent route", new Rect(9, 2, 9, 5), new Color(0.42f, 0.57f, 0.67f), "");
-            AddMapRegion(content, "Main corridor", new Rect(8, 7, 18, 2), new Color(0.63f, 0.70f, 0.72f), "");
-            AddMapRegion(content, "West corridor", new Rect(20, 6, 4, 3), new Color(0.63f, 0.70f, 0.72f), "");
-            AddMapRegion(content, "Guard office", new Rect(23, 10, 11, 7), new Color(0.48f, 0.58f, 0.63f), "");
-            AddMapRegion(content, "Exit wing", new Rect(33, 12, 5, 2), new Color(0.84f, 0.68f, 0.37f), "");
-            AddDiscoveredHidingPoints(content, player, 4f);
-            AddExitMarker(content, false);
-            return content;
-        }
+            var layout = new LevelMapLayout
+            {
+                levelTitle = "NHÀ TÙ · CỤM 01",
+                miniMapTitle = "SƠ ĐỒ KHU VỰC",
+                mapTitle = "SƠ ĐỒ NHÀ TÙ",
+                worldBounds = new Rect(2f, 2f, 36f, 20f),
+                regions = new[]
+                {
+                    new LevelMapRegion("Cell block", new Rect(2, 2, 6, 7), new Color(0.95f, 0.63f, 0.25f), "BUỒNG"),
+                    new LevelMapRegion("Vent route", new Rect(9, 2, 9, 5), new Color(0.42f, 0.57f, 0.67f), "ỐNG GIÓ"),
+                    new LevelMapRegion("Main corridor", new Rect(8, 7, 18, 2), new Color(0.63f, 0.70f, 0.72f), "HÀNH LANG"),
+                    new LevelMapRegion("West corridor", new Rect(20, 6, 4, 3), new Color(0.63f, 0.70f, 0.72f)),
+                    new LevelMapRegion("Guard office", new Rect(23, 10, 11, 7), new Color(0.48f, 0.58f, 0.63f), "VĂN PHÒNG"),
+                    new LevelMapRegion("Exit wing", new Rect(33, 12, 5, 2), new Color(0.84f, 0.68f, 0.37f), "CỬA RA")
+                }
+            };
 
-        private static RectTransform BuildPrisonMap(Transform parent, Transform player)
-        {
-            var content = CreateMapContent(parent, "Level 01 Map Content", new Vector2(10, 13), new Vector2(154, 130));
-            AddMapRegion(content, "Cell block", new Rect(2, 2, 6, 7), new Color(0.95f, 0.63f, 0.25f), "BUỒNG");
-            AddMapRegion(content, "Vent route", new Rect(9, 2, 9, 5), new Color(0.42f, 0.57f, 0.67f), "ỐNG GIÓ");
-            AddMapRegion(content, "Main corridor", new Rect(8, 7, 18, 2), new Color(0.63f, 0.70f, 0.72f), "HÀNH LANG");
-            AddMapRegion(content, "West corridor", new Rect(20, 6, 4, 3), new Color(0.63f, 0.70f, 0.72f), "");
-            AddMapRegion(content, "Guard office", new Rect(23, 10, 11, 7), new Color(0.48f, 0.58f, 0.63f), "VĂN PHÒNG");
-            AddMapRegion(content, "Exit wing", new Rect(33, 12, 5, 2), new Color(0.84f, 0.68f, 0.37f), "CỬA RA");
-            AddDiscoveredHidingPoints(content, player, 6f);
-            AddExitMarker(content, true);
-            return content;
-        }
-
-        private static void AddExitMarker(RectTransform parent, bool includeLabel)
-        {
             var gate = UnityEngine.Object.FindObjectOfType<GateInteractable>(true);
             var exitObject = gate != null ? gate.gameObject : GameObject.Find("Prison Exit");
-            if (exitObject == null) return;
+            if (exitObject != null)
+                layout.markers = new[]
+                {
+                    new LevelMapMarker("Exit marker", exitObject.transform.position, new Color(1f, 0.48f, 0.27f), "RA", 10f)
+                };
+            return layout;
+        }
 
-            var worldPosition = (Vector2)exitObject.transform.position;
-            var normalized = new Vector2(
-                (worldPosition.x - Level01MapBounds.xMin) / Level01MapBounds.width,
-                (worldPosition.y - Level01MapBounds.yMin) / Level01MapBounds.height);
-            var marker = CreateMapMarker(parent, "Exit marker", new Color(1f, 0.48f, 0.27f));
-            marker.anchorMin = marker.anchorMax = normalized;
-            marker.sizeDelta = new Vector2(parent.sizeDelta.x < 130f ? 8f : 10f, parent.sizeDelta.x < 130f ? 8f : 10f);
-            if (!includeLabel) return;
+        private static LevelMapLayout ValidateMapLayout(LevelMapLayout layout)
+        {
+            if (layout.worldBounds.width <= 0f || layout.worldBounds.height <= 0f)
+                throw new ArgumentException("Level map worldBounds must have positive width and height.", nameof(layout));
+            if (layout.regions == null) layout.regions = Array.Empty<LevelMapRegion>();
+            if (layout.markers == null) layout.markers = Array.Empty<LevelMapMarker>();
+            if (string.IsNullOrWhiteSpace(layout.levelTitle)) layout.levelTitle = "BREAKOUT ISLE";
+            if (string.IsNullOrWhiteSpace(layout.miniMapTitle)) layout.miniMapTitle = "SƠ ĐỒ KHU VỰC";
+            if (string.IsNullOrWhiteSpace(layout.mapTitle)) layout.mapTitle = layout.levelTitle;
+            if (layout.miniMapContentSize.x <= 0f || layout.miniMapContentSize.y <= 0f ||
+                layout.fullMapContentSize.x <= 0f || layout.fullMapContentSize.y <= 0f)
+                throw new ArgumentException("Level map content sizes must be positive.", nameof(layout));
+            return layout;
+        }
 
-            var label = CreateText(marker, "Exit label", "RA", 8, new Vector2(0, 0.5f), new Vector2(7, 0), new Vector2(23, 12));
-            label.alignment = TextAnchor.MiddleLeft;
-            label.color = new Color(1f, 0.82f, 0.55f);
+        public static Vector2 NormalizeMapPosition(Rect worldBounds, Vector2 worldPosition)
+        {
+            if (worldBounds.width <= 0f || worldBounds.height <= 0f)
+                throw new ArgumentException("Map bounds must have positive width and height.", nameof(worldBounds));
+            return new Vector2(
+                (worldPosition.x - worldBounds.xMin) / worldBounds.width,
+                (worldPosition.y - worldBounds.yMin) / worldBounds.height);
+        }
+
+        private static RectTransform BuildMapContent(Transform parent, Transform player, LevelMapLayout layout, bool minimap)
+        {
+            var content = minimap
+                ? CreateMapContent(parent, "Minimap floorplan", layout.miniMapContentPosition, layout.miniMapContentSize)
+                : CreateMapContent(parent, "Level Map Content", layout.fullMapContentPosition, layout.fullMapContentSize);
+            foreach (var region in layout.regions)
+            {
+                if (region == null) continue;
+                AddMapRegion(content, region, layout.worldBounds, minimap ? string.Empty : region.label);
+            }
+            foreach (var marker in layout.markers)
+            {
+                if (marker == null) continue;
+                AddMapMarker(content, marker, layout.worldBounds, minimap);
+            }
+            if (layout.showDiscoveredHidingSpots)
+                AddDiscoveredHidingPoints(content, player, layout.worldBounds,
+                    minimap ? layout.miniHidingMarkerSize : layout.fullHidingMarkerSize);
+            return content;
         }
 
         private static RectTransform CreateMapContent(Transform parent, string name, Vector2 position, Vector2 size)
@@ -343,22 +453,43 @@ namespace BreakoutIsle.Editor
             return rect;
         }
 
-        private static void AddMapRegion(RectTransform parent, string name, Rect worldRect, Color tint, string label)
+        private static void AddMapRegion(RectTransform parent, LevelMapRegion region, Rect bounds, string label)
         {
-            var bounds = Level01MapBounds;
+            var clippedMin = new Vector2(
+                Mathf.Clamp(region.worldRect.xMin, bounds.xMin, bounds.xMax),
+                Mathf.Clamp(region.worldRect.yMin, bounds.yMin, bounds.yMax));
+            var clippedMax = new Vector2(
+                Mathf.Clamp(region.worldRect.xMax, bounds.xMin, bounds.xMax),
+                Mathf.Clamp(region.worldRect.yMax, bounds.yMin, bounds.yMax));
+            if (clippedMax.x <= clippedMin.x || clippedMax.y <= clippedMin.y) return;
             var width = parent.sizeDelta.x;
             var height = parent.sizeDelta.y;
-            var min = new Vector2((worldRect.xMin - bounds.xMin) / bounds.width, (worldRect.yMin - bounds.yMin) / bounds.height);
-            var size = new Vector2(worldRect.width / bounds.width * width, worldRect.height / bounds.height * height);
-            var region = CreateImage(parent, name, LoadSprite(SkinPath + "button.png"), min, Vector2.zero,
+            var min = new Vector2((clippedMin.x - bounds.xMin) / bounds.width, (clippedMin.y - bounds.yMin) / bounds.height);
+            var size = new Vector2((clippedMax.x - clippedMin.x) / bounds.width * width, (clippedMax.y - clippedMin.y) / bounds.height * height);
+            var regionImage = CreateImage(parent, region.name, LoadSprite(SkinPath + "button.png"), min, Vector2.zero,
                 Vector2.zero, size, Image.Type.Simple);
-            region.color = tint;
-            region.raycastTarget = false;
+            regionImage.color = region.color;
+            regionImage.raycastTarget = false;
             if (!string.IsNullOrEmpty(label))
             {
-                var text = CreateText(region.transform, name + " Label", label, 7, new Vector2(0.5f, 0.5f), Vector2.zero, size - new Vector2(2, 2));
+                var text = CreateText(regionImage.transform, region.name + " Label", label, 7, new Vector2(0.5f, 0.5f), Vector2.zero, size - new Vector2(2, 2));
                 text.alignment = TextAnchor.MiddleCenter;
             }
+        }
+
+        private static void AddMapMarker(RectTransform parent, LevelMapMarker markerDefinition, Rect bounds, bool minimap)
+        {
+            if (!bounds.Contains(markerDefinition.worldPosition)) return;
+            var normalized = NormalizeMapPosition(bounds, markerDefinition.worldPosition);
+            var marker = CreateMapMarker(parent, markerDefinition.name, markerDefinition.color);
+            marker.anchorMin = marker.anchorMax = normalized;
+            var markerSize = markerDefinition.size * (minimap ? 0.8f : 1f);
+            marker.sizeDelta = new Vector2(markerSize, markerSize);
+            if (minimap || string.IsNullOrWhiteSpace(markerDefinition.label)) return;
+            var label = CreateText(marker, markerDefinition.name + " Label", markerDefinition.label, 8,
+                new Vector2(0, 0.5f), new Vector2(markerDefinition.size * 0.5f + 2f, 0), new Vector2(23, 12));
+            label.alignment = TextAnchor.MiddleLeft;
+            label.color = new Color(1f, 0.82f, 0.55f);
         }
 
         private static RectTransform CreateMapMarker(RectTransform parent, string name, Color color)
@@ -375,16 +506,15 @@ namespace BreakoutIsle.Editor
             return rect;
         }
 
-        private static void AddDiscoveredHidingPoints(RectTransform parent, Transform player, float size)
+        private static void AddDiscoveredHidingPoints(RectTransform parent, Transform player, Rect bounds, float size)
         {
             var spots = UnityEngine.Object.FindObjectsOfType<HidingSpot>(true);
             foreach (var spot in spots)
             {
                 if (spot == null) continue;
                 var world = (Vector2)spot.transform.position;
-                var normalized = new Vector2(
-                    (world.x - Level01MapBounds.xMin) / Level01MapBounds.width,
-                    (world.y - Level01MapBounds.yMin) / Level01MapBounds.height);
+                if (!bounds.Contains(world)) continue;
+                var normalized = NormalizeMapPosition(bounds, world);
                 var point = new GameObject("Discovered " + spot.name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(HidingSpotMapReveal));
                 point.transform.SetParent(parent, false);
                 var rect = point.GetComponent<RectTransform>();
