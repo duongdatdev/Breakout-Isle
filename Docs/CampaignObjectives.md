@@ -8,10 +8,10 @@ Each level uses its own objective IDs. Quest item IDs are also level-scoped unle
 
 | Level | Objective ID | Completion / gate | Result |
 | --- | --- | --- | --- |
-| 1 — Cell block | `spoon_found` | Pick up `spoon` | — |
-|  | `vent_opened` | Vent action requires and consumes `spoon` | — |
-|  | `card_found` | Pick up `guard_keycard`; requires `vent_opened` | — |
-|  | `cellblock_exit_opened` | Exit action requires and consumes `guard_keycard`; requires `card_found` | Level 1 complete; checkpoint after vent and after card as authored |
+| 1 — Cell block (`prison-01`) | `find-spoon` | Find the `spoon` under the pillow | — |
+|  | `open-vent` | Vent action requires and consumes `spoon`; requires `find-spoon` | — |
+|  | `find-keycard` | Pick up `keycard`; requires `open-vent` | — |
+|  | `escape` | Exit action requires and consumes `keycard`; requires `find-keycard` | Level 1 complete; checkpoint after vent and after card as authored |
 | 2 — Canteen and laundry | `power_cut` | Operate engineering lever | Lights switch off, exposing chest |
 |  | `laundry_chest_key_found` | Pick up `laundry_chest_key`; requires `power_cut` | — |
 |  | `yard_gate_key_found` | Chest action requires and consumes `laundry_chest_key`; rewards `yard_gate_key` | Checkpoint after chest |
@@ -35,7 +35,7 @@ Each level uses its own objective IDs. Quest item IDs are also level-scoped unle
 |  | `station_gate_key_found` | Pick up `station_gate_key`; requires `electric_fence_disabled` | — |
 |  | `station_gate_opened` | Gate action requires and consumes `station_gate_key` | — |
 |  | `truck_escape_started` | Truck action requires `station_gate_opened` | Level 6 complete |
-| 7 — Shanty town | `civilian_clothes_found` | Pick up and equip `civilian_outfit` | Outfit state is persisted |
+| 7 — Shanty town | `civilian_clothes_found` | Pick up and equip `civilian_clothes` | Outfit state is persisted |
 |  | `pawnshop_owner_distracted` | Distract action | Store safe becomes accessible |
 |  | `pawnshop_safe_key_found` | Pick up `pawnshop_safe_key`; requires `pawnshop_owner_distracted` | — |
 |  | `cipher_note_found` | Safe action requires and consumes `pawnshop_safe_key`; rewards campaign item `cipher_note` | Checkpoint after note |
@@ -45,11 +45,11 @@ Each level uses its own objective IDs. Quest item IDs are also level-scoped unle
 |  | `market_exit_key_found` | Chest action requires and consumes `sewer_chest_key`; rewards `market_exit_key` | Checkpoint after valves and chest |
 |  | `sewer_exit_opened` | Exit action requires and consumes `market_exit_key` | Level 8 complete |
 | 9 — Night market and police station | `market_cameras_disabled` | Operate camera power switch | — |
-|  | `harbor_pass_found` | Pick up `harbor_pass`; requires `market_cameras_disabled` | Checkpoint after pass; preserve pass for level 10 |
-|  | `harbor_gate_opened` | Exit action requires `harbor_pass` | Level 9 complete |
+|  | `port_pass_found` | Pick up `port_pass`; requires `market_cameras_disabled` | Checkpoint after pass; preserve pass for level 10 |
+|  | `harbor_gate_opened` | Exit action requires `port_pass` | Level 9 complete |
 | 10 — Harbor | `courier_package_found` | Find the crew's stored package | — |
 |  | `container_route_opened` | Crane action requires `courier_package_found` | Container route opens |
-|  | `boat_key_found` | Package action requires `container_route_opened` and campaign item `harbor_pass`; rewards `boat_key` | Trigger global alarm and 60-second finale timer; checkpoint after key |
+|  | `boat_key_found` | Package action requires `container_route_opened` and campaign item `port_pass`; rewards `boat_key` | Trigger global alarm and 60-second finale timer; checkpoint after key |
 |  | `boat_escape_started` | Boat action requires and consumes `boat_key` before timer expiry | Campaign complete |
 
 ## Campaign carry
@@ -57,7 +57,7 @@ Each level uses its own objective IDs. Quest item IDs are also level-scoped unle
 - Preserve the three support slots and selected slot across every level transition.
 - Preserve outfit across transitions, including the civilian outfit acquired in level 7.
 - Preserve explicitly authored persistent story flags.
-- Preserve only the campaign quest items `cipher_note` from level 7 to level 8 and `harbor_pass` from level 9 to level 10. Other quest items remain level-local and clear on transition.
+- Preserve only the campaign quest items `cipher_note` from level 7 to level 8 and `port_pass` from level 9 to level 10. Other quest items remain level-local and clear on transition.
 - Build the destination save from that scene's authored world baseline and checkpoint anchor. Do not copy source-level world entity records into a destination snapshot.
 - Keep the source profile as primary until the destination scene, session, world baseline, checkpoint anchor, and initial snapshot are all valid. Failed scene loading or initialization must leave the source profile recoverable.
 
