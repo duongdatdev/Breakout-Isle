@@ -1,0 +1,1 @@
+The initial generated sheet (rejected-four-columns.png) had four columns and 32 frames instead of the required six columns and 48 frames. It is retained as a rejected attempt and must not be exported. Regeneration uses an explicit 6x8 geometry guide and a single accepted identity frame.
