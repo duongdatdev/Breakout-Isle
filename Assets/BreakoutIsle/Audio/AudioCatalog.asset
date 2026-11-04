@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca755e5c2fd21a04ea000d9cca4dfdb2, type: 3}
+  m_Name: AudioCatalog
+  m_EditorClassIdentifier: BreakoutIsle.Runtime::BreakoutIsle.Audio.AudioCatalog
+  events:
+  - id: player.step.prison
+    clips:
+    - {fileID: 8300000, guid: 022e04441afe073499c6af7a31af5713, type: 3}
+    - {fileID: 8300000, guid: c5d3b05047ceb39408cb6420db44e52b, type: 3}
+    - {fileID: 8300000, guid: 282e332000902ba479dba5e115256f11, type: 3}
+    - {fileID: 8300000, guid: d4603c66a596246468115c51698ada7f, type: 3}
+  - id: player.step.forest
+    clips:
+    - {fileID: 8300000, guid: 849f210769395ad4f87dd725544ee77a, type: 3}
+    - {fileID: 8300000, guid: 2e5ff8804e7970348938986e76a40256, type: 3}
+    - {fileID: 8300000, guid: 3979b6d548af0bd428b3562d33c2163c, type: 3}
+    - {fileID: 8300000, guid: 3feff264feb090c44b4e80a95ae11146, type: 3}
+    - {fileID: 8300000, guid: d70c0707eea37e6469ea5227537f0bc6, type: 3}
+  - id: player.step.wood
+    clips:
+    - {fileID: 8300000, guid: dceefba63f6928b4394f4ff72ca1dc4a, type: 3}
+    - {fileID: 8300000, guid: c580205d8f1e0694b98cdf9bf6f8bdad, type: 3}
+    - {fileID: 8300000, guid: 29bf103a6d917d249b616a19f43d66bf, type: 3}
+  - id: player.step.gravel
+    clips:
+    - {fileID: 8300000, guid: 869716047a5d8be4db8cff66ab5b0cb7, type: 3}
+  - id: player.step.mud
+    clips:
+    - {fileID: 8300000, guid: 6630ec20a98f3bd43804cfbc9ac0f6f0, type: 3}
+  - id: player.step.water
+    clips:
+    - {fileID: 8300000, guid: 6651e2d1b5501b6458007dbb1551d58e, type: 3}
+    - {fileID: 8300000, guid: e58b856083abd3843b4464ee82ffb313, type: 3}
+  - id: interaction.door.open
+    clips:
+    - {fileID: 8300000, guid: 72a7549acb4d0e44186258a4617fc8aa, type: 3}
+  - id: interaction.door.close
+    clips:
+    - {fileID: 8300000, guid: bcdd8f203c299114da694e14cb3454a9, type: 3}
+  - id: interaction.switch
+    clips:
+    - {fileID: 8300000, guid: 24854f6df676c88489d10cce0b821eae, type: 3}
+  - id: interaction.lock
+    clips:
+    - {fileID: 8300000, guid: 5c9b5ca6d396d3a4aaa3046afc16b22d, type: 3}
+    - {fileID: 8300000, guid: c47d052b09aa92c469965a922a85476d, type: 3}
+  - id: hazard.bear_trap.snap
+    clips:
+    - {fileID: 8300000, guid: 5c9b5ca6d396d3a4aaa3046afc16b22d, type: 3}
+    - {fileID: 8300000, guid: 082266a9f4f07364fb1447112bf945fa, type: 3}
+  - id: interaction.pickup
+    clips:
+    - {fileID: 8300000, guid: ac58c20f0b0ee78449894c2c2bc9888e, type: 3}
+    - {fileID: 8300000, guid: 317534f1900a0d9409c8ae7a8ac449d8, type: 3}
+  - id: interaction.paper
+    clips:
+    - {fileID: 8300000, guid: e98b0923cbd065a4e9492bdbd21d9f6d, type: 3}
+  - id: ui.click
+    clips:
+    - {fileID: 8300000, guid: 214b628a728819f40afd848ebf782d9d, type: 3}
+  - id: ui.confirm
+    clips:
+    - {fileID: 8300000, guid: ac58c20f0b0ee78449894c2c2bc9888e, type: 3}
+  - id: ui.cancel
+    clips:
+    - {fileID: 8300000, guid: 65c80bae7ac1f7f43bf4fed2fc0648e3, type: 3}
+  - id: ui.error
+    clips:
+    - {fileID: 8300000, guid: 1f1b25a70c1eaf34f8a10044b2a20d0f, type: 3}
+  - id: ui.panel.open
+    clips:
+    - {fileID: 8300000, guid: 30f387270cc20fd4b8771f3146950237, type: 3}
+  - id: ui.checkpoint.saved
+    clips:
+    - {fileID: 8300000, guid: ac58c20f0b0ee78449894c2c2bc9888e, type: 3}
+  - id: alert.guard
+    clips:
+    - {fileID: 8300000, guid: 3ad7235826b9794479897fceff1fd4b4, type: 3}
+  - id: alert.heartbeat
+    clips:
+    - {fileID: 8300000, guid: 4c6a40ea7f2e6ce44b184fa0fa612a6e, type: 3}
+  - id: animal.dog.bark
+    clips:
+    - {fileID: 8300000, guid: 26feba821e038c346b23a1cb41636448, type: 3}
+  - id: throw.impact.soft
+    clips:
+    - {fileID: 8300000, guid: 7ba89bf75a7e8254db40678b675271b5, type: 3}
+  - id: throw.impact.wood
+    clips:
+    - {fileID: 8300000, guid: 2d41febc3f0b18542a5de2f21b73b3da, type: 3}
+  - id: throw.impact.metal
+    clips:
+    - {fileID: 8300000, guid: 082266a9f4f07364fb1447112bf945fa, type: 3}
+  - id: throw.impact.glass
+    clips:
+    - {fileID: 8300000, guid: 1d676b436a4fa294f8151a24349ec577, type: 3}
+    - {fileID: 8300000, guid: 162e106344a483f4ea222307c98af4f7, type: 3}
+  - id: throw.firecracker
+    clips:
+    - {fileID: 8300000, guid: aef31011771f82b4aada75531315fa4b, type: 3}
+  - id: ambience.prison
+    clips:
+    - {fileID: 8300000, guid: 6e4fbb67d95c66a44b9fca4c67772ee4, type: 3}
+  - id: ambience.forest
+    clips:
+    - {fileID: 8300000, guid: aa25df7bf8753704d9fb9e5f3ca30c5b, type: 3}
+  - id: ambience.city
+    clips:
+    - {fileID: 8300000, guid: a0661c44dd96fb14895e54b8cd01cc1c, type: 3}
+  - id: music.stealth
+    clips:
+    - {fileID: 8300000, guid: 4d3c6377006c0524cb982fcacbba1199, type: 3}
+  - id: music.chase
+    clips:
+    - {fileID: 8300000, guid: 67126abfce8d51a4d950160d98e22ddd, type: 3}
